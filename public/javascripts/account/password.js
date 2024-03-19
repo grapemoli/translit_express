@@ -26,69 +26,82 @@ window.addEventListener('load', (event) => {
 
     // Additional housekeeping, preparing the elements.
     submitButton.disabled = true;
+    oldPassword.required = true;
+    newPassword1.required = true;
+    newPassword2.required = true;
     oldPasswordError.setValidation(true);
     newPassword1Error.setValidation(true);
     newPassword2Error.setValidation(true);
     oldPasswordError.showToScreenReader();
     newPassword1Error.showToScreenReader();
     newPassword2Error.showToScreenReader();
+
+    // Clean the page if the user is re-visiting this page.
+    clean(true, true, true);
+    oldPassword.value = '';
+    newPassword1.value = '';
+    newPassword2.value = '';
 });
 
 
 // Functions for validation, and submitting.
 function validate () {
-
-    if (newPassword1.value && newPassword2.value) {
-
-        if (newPassword1.value === newPassword2.value) {
-
-            // Matching passwords. Check if the old password is filled.
-            if (!! oldPassword.value) {
-                // Valid.
-                clean (true, true, true);
-                submitButton.disabled = false;
-            }
-            else {
-                // Old password is not filled.
-                clean (false, true, true);
-            }
-
+    // If the two new passwords match and are not empty, check that the old password
+    // is filled before letting the user post their form.
+    if (checkPasswords ()) {
+        if (!!oldPassword.value) {
+            // Valid.
+            clean (true, true, true);
+            submitButton.disabled = false;
         } else {
-            // Non-matching fields.
+            // The old password is not filled. Invalid.
+            oldPassword.valid = false;
+            submitButton.disabled = true;
+        }
+    }
+    else {
+        // Passwords don't match, or something is empty.
+        oldPassword.valid = !!oldPassword.value;
+        submitButton.disabled = true;
+    }
+}
+
+function checkPasswords() {
+    // Returns true if the passwords match validly. False otherwise.
+
+    // Checks if they're empty or not.
+    if (!!newPassword1.valid && !!newPassword2.valid) {
+
+        // Not empty. Check that the fields match.
+        if (newPassword1.value === newPassword2.value) {
+            // Valid password.
+            newPassword1.valid = true;
+            newPassword2.valid = true;
+            newPassword1Error.setValidity(true);
+            newPassword2Error.setValidity(true);
+            newPassword1Error.setContent('');
+            newPassword2Error.setContent('');
+            submitButton.disabled = false;
+            return true;
+        }
+        else {
+            // Passwords don't match.
             newPassword1.valid = false;
             newPassword2.valid = false;
             newPassword1Error.setValidity(false);
             newPassword2Error.setValidity(false);
             newPassword1Error.setContent('Passwords are not matching.');
             newPassword2Error.setContent('Passwords are not matching.');
-
             submitButton.disabled = true;
+            return false;
         }
-
-    } else {
-        // One password isn't typed.
-        const old = !!oldPassword.value;
-        const new1 = !!newPassword1.value;
-        const new2 = !!newPassword2.value;
-
-        clean(old, new1, new2);
-
-        submitButton.disabled = true;
     }
-}
-
-function empty(id) {
-    const elementHTML = document.getElementById(id);
-    var element = new mdc.textfield.MDCTextField(elementHTML);
-
-    id += 'Msg';
-    const elementErrorHTML = document.getElementById(id);
-    var elementError = new mdc.textfield.MDCTextFieldHelperText(elementErrorHTML).foundation;
-
-    if (element.value === '') {
-        element.valid = false;
-        elementError.setValidity(false);
-        elementError.setContent('Required');
+    else {
+        // Empty. Clean the validation messages from previous events.
+        newPassword1Error.setContent('');
+        newPassword2Error.setContent('');
+        submitButton.disabled = true;
+        return false;
     }
 }
 
@@ -117,9 +130,11 @@ function visible(id) {
     element.type = (element.type === 'text' ? 'password' : 'text');
 
     var button = document.getElementById(id + 'Button');
-    button.innerText = (button.innerText === 'visibility' ? 'visibility_off' : 'visibility')
+    button.innerText = (button.innerText === 'visibility' ? 'visibility_off' : 'visibility');
+
+    checkPasswords();
 }
 
 function submit () {
-    console.log('New Password: ' + newPassword2.value);
+    console.log('New password: ' + oldPassword.value + '-->' + newPassword1.value);
 }

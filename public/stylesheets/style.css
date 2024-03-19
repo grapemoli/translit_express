@@ -15,4 +15,12 @@ body {
     padding-top: env(safe-area-inset-top);
 }
 
+.mdc-text-field--focused {
+    color: #506751;
+}
+
+.mdc-line-ripple-color {
+    color: #506751;
+}
+
 

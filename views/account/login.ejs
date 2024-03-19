@@ -34,63 +34,56 @@
 <main class="mdc-top-app-bar--fixed-adjust mdc-typography">
 
     <form class="form-container">
-
         <!-- Form. -->
-        <h1 class="mdc-typography--headline5" style="text-align:center">Sign In</h1>
+
+        <h1 class="mdc-typography--headline5" style="text-align:center">Create an Account</h1>
 
         <!-- Username -->
-        <label id='username' class="userInput mdc-text-field mdc-text-field--outlined mdc-text-field--no-label">
-            <span class="mdc-notched-outline">
-                <span class="mdc-notched-outline__leading"></span>
-                <span class="mdc-notched-outline__notch">
-                </span>
-                <span class="mdc-notched-outline__trailing"></span>
+        <label id='username' class="userInput mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon">
+          <span class="mdc-notched-outline">
+            <span class="mdc-notched-outline__leading"></span>
+            <span class="mdc-notched-outline__notch">
+              <span class="mdc-floating-label" id="my-label-id">Username</span>
             </span>
-
+            <span class="mdc-notched-outline__trailing"></span>
+          </span>
             <input id='usernameInput' class="mdc-text-field__input" type="text"
-                   placeholder="Username"
                    aria-labelledby="username"
                    aria-controls="username"
                    aria-describedby="username"
                    onkeyup="validate()"
-                   onkeydown="empty('username')"
-                   onChange="validate('username')"
-                   onclick="empty('username')">
+                   onChange="validate('username')">
         </label>
         <div class="validation mdc-text-field-helper-line">
-            <div id="usernameMsg" class="mdc-text-field-helper-text--validation-msg" aria-hidden="true"></div>
+            <div id="usernameMsg" class="mdc-text-field-helper-text--validation-msg mdc-text-field-helper-text--validation-msg" aria-hidden="true"></div>
         </div>
 
-        <!-- Password -->
-        <label id='password' class="userInput mdc-text-field mdc-text-field--outlined mdc-text-field--no-label mdc-text-field--with-trailing-icon">
-            <span class="mdc-notched-outline">
-                <span class="mdc-notched-outline__leading"></span>
-                <span class="mdc-notched-outline__notch">
-                </span>
-                <span class="mdc-notched-outline__trailing"></span>
-            </span>
 
+        <!-- Password. -->
+        <label id='password' class="userInput mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon">
+          <span class="mdc-notched-outline">
+            <span class="mdc-notched-outline__leading"></span>
+            <span class="mdc-notched-outline__notch">
+              <span class="mdc-floating-label" id="my-label-id">Password</span>
+            </span>
+            <span class="mdc-notched-outline__trailing"></span>
+          </span>
             <input id='passwordInput' class="mdc-text-field__input" type="password"
-                   placeholder="Password"
                    aria-labelledby="password"
                    aria-controls="password"
                    aria-describedby="password"
                    onkeyup="validate()"
-                   onkeydown="empty('password')"
-                   onChange="validate()"
-                   onclick="empty('password')">
-
+                   onChange="validate('password')">
             <i id='passwordButton' class="material-icons material-symbols-outlined mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button" onclick="visible('password')">visibility_off</i>
         </label>
-
         <div class="validation mdc-text-field-helper-line">
-            <div id="passwordMsg" class="mdc-text-field-helper-text--validation-msg" aria-hidden="true"></div>
+            <div id="passwordMsg" class="mdc-text-field-helper-text--validation-msg mdc-text-field-helper-text--validation-msg" aria-hidden="true"></div>
         </div>
 
         <!-- Submit Button -->
         <button id='submitButton' class="mdc-button mdc-button--unelevated mdc-ripple-upgraded" onsubmit="submit()" disabled>
             <div class="mdc-button__ripple"></div>
-            <span class="mdc-button__label">Login</span>
+            <span class="mdc-button__label">Create Account</span>
         </button>
 
     </form>

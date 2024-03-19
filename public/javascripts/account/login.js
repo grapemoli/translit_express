@@ -18,6 +18,11 @@ window.addEventListener('load', (event) => {
 
     submitButton = document.getElementById('submitButton');
 
+    // Cleaning the page if the user is re-vising.
+    clean(true, true);
+    username.value = '';
+    password.value = '';
+
     // Additional housekeeping, preparing the elements.
     submitButton.disabled = true;
     username.required = true;
@@ -31,7 +36,6 @@ window.addEventListener('load', (event) => {
 
 // Functions for validation, and submitting.
 function validate () {
-
     if (!!username.value) {
         if (!!password.value) {
             // Both fields are filled.
@@ -40,33 +44,19 @@ function validate () {
         } else {
             // Username inputted, but not password.
             clean (true, false);
+            submitButton.disabled = true;
         }
     } else {
-
         if (!!password.value) {
             // Username is not inputted, but password inputted.
             clean (false, true);
+            submitButton.disabled = true;
         }
         else {
             // Username and password are not inputted.
-            // Do nothing.
+            submitButton.disabled = true;
         }
 
-    }
-}
-
-function empty(id) {
-    const elementHTML = document.getElementById(id);
-    var element = new mdc.textfield.MDCTextField(elementHTML);
-
-    id += 'Msg';
-    const elementErrorHTML = document.getElementById(id);
-    var elementError = new mdc.textfield.MDCTextFieldHelperText(elementErrorHTML).foundation;
-
-    if (element.value === '') {
-        element.valid = false;
-        elementError.setValidity(false);
-        elementError.setContent('Required');
     }
 }
 

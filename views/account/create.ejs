@@ -8,6 +8,7 @@
     <link rel='stylesheet' href='/@material/textfield/dist/mdc.textfield.css'/>
     <link rel='stylesheet' href='/@material/icon-button/dist/mdc.icon-button.css'/>
     <link rel='stylesheet' href='/stylesheets/account/create.css'/>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
 
     <script src="/@material/form-field/dist/mdc.formField.js"></script>
     <script src="/@material/textfield/dist/mdc.textfield.js"></script>
@@ -39,82 +40,71 @@
         <h1 class="mdc-typography--headline5" style="text-align:center">Create an Account</h1>
 
         <!-- Username -->
-        <label id='username' class="userInput mdc-text-field mdc-text-field--outlined mdc-text-field--no-label mdc-text-field--with-trailing-icon">
-            <span class="mdc-notched-outline">
-                <span class="mdc-notched-outline__leading"></span>
-                <span class="mdc-notched-outline__notch">
-                </span>
-                <span class="mdc-notched-outline__trailing"></span>
+        <label id='username' class="userInput mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon">
+          <span class="mdc-notched-outline">
+            <span class="mdc-notched-outline__leading"></span>
+            <span class="mdc-notched-outline__notch">
+              <span class="mdc-floating-label" id="my-label-id">Username</span>
             </span>
-
-            <input id='usernameInput' class="mdc-text-field__input" type="password"
-                   placeholder="Username"
+            <span class="mdc-notched-outline__trailing"></span>
+          </span>
+            <input id='usernameInput' class="mdc-text-field__input" type="text"
                    aria-labelledby="username"
                    aria-controls="username"
                    aria-describedby="username"
                    onkeyup="validate()"
-                   onkeydown="empty('username')"
-                   onChange="validate('username')"
-                   onclick="empty('username')">
-
+                   onChange="validate('username')">
         </label>
         <div class="validation mdc-text-field-helper-line">
-            <div id="usernameMsg" class="mdc-text-field-helper-text--validation-msg" aria-hidden="true"></div>
+            <div id="usernameMsg" class="mdc-text-field-helper-text--validation-msg mdc-text-field-helper-text--validation-msg" aria-hidden="true"></div>
         </div>
 
 
 
-        <!-- New Password #1 -->
-        <label id='newPassword1' class="userInput mdc-text-field mdc-text-field--outlined mdc-text-field--no-label mdc-text-field--with-trailing-icon">
-            <span class="mdc-notched-outline">
-                <span class="mdc-notched-outline__leading"></span>
-                <span class="mdc-notched-outline__notch">
-                </span>
-                <span class="mdc-notched-outline__trailing"></span>
+
+        <!-- Password #1 -->
+        <label id='password1' class="userInput mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon">
+          <span class="mdc-notched-outline">
+            <span class="mdc-notched-outline__leading"></span>
+            <span class="mdc-notched-outline__notch">
+              <span class="mdc-floating-label" id="my-label-id">Password</span>
             </span>
-
-            <input id='newPassword1Input' class="mdc-text-field__input" type="password"
-                   placeholder="New Password"
-                   aria-labelledby="newPassword1"
-                   aria-controls="newPassword1"
-                   aria-describedby="newPassword1"
+            <span class="mdc-notched-outline__trailing"></span>
+          </span>
+            <input id='password1Input' class="mdc-text-field__input" type="password"
+                   aria-labelledby="password1"
+                   aria-controls="password1"
+                   aria-describedby="password1"
                    onkeyup="validate()"
-                   onkeydown="empty('newPassword1')"
-                   onChange="validate()"
-                   onclick="empty('newPassword1')">
-
-            <i id='newPassword1Button' class="material-icons material-symbols-outlined mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button" onclick="visible('newPassword1')">visibility_off</i>
+                   onChange="validate('password1')"
+                   onclick="checkPasswords()">
+            <i id='password1Button' class="material-icons material-symbols-outlined mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button" onclick="visible('password1')">visibility_off</i>
         </label>
-
         <div class="validation mdc-text-field-helper-line">
-            <div id="newPassword1Msg" class="mdc-text-field-helper-text--validation-msg" aria-hidden="true"></div>
+            <div id="password1Msg" class="mdc-text-field-helper-text--validation-msg mdc-text-field-helper-text--validation-msg" aria-hidden="true"></div>
         </div>
 
 
-
-        <!-- New Password #2 -->
-        <label id='newPassword2' class="userInput mdc-text-field mdc-text-field--outlined mdc-text-field--no-label mdc-text-field--with-trailing-icon">
-            <span class="mdc-notched-outline">
-                <span class="mdc-notched-outline__leading"></span>
-                <span class="mdc-notched-outline__notch">
-                </span>
-                <span class="mdc-notched-outline__trailing"></span>
+        <!-- Password #2 -->
+        <label id='password2' class="userInput mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon">
+          <span class="mdc-notched-outline">
+            <span class="mdc-notched-outline__leading"></span>
+            <span class="mdc-notched-outline__notch">
+              <span class="mdc-floating-label" id="my-label-id">Confirm Password</span>
             </span>
-
-            <input id='newPassword2Input' class="mdc-text-field__input" type="password"
-                   placeholder="Confirm New Password"
-                   aria-labelledby="newPassword2"
-                   aria-controls="newPassword2"
-                   aria-describedby="newPassword2"
+            <span class="mdc-notched-outline__trailing"></span>
+          </span>
+            <input id='password2Input' class="mdc-text-field__input" type="password"
+                   aria-labelledby="password2"
+                   aria-controls="password2"
+                   aria-describedby="password2"
                    onkeyup="validate()"
-                   onkeydown="empty('newPassword2')"
-                   onChange="validate()"
-                   onclick="empty('newPassword2')">
-
-            <i id='newPassword2Button' class="material-icons material-symbols-outlined mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button" onclick="visible('newPassword2')">visibility_off</i>
+                   onChange="validate('password2')"
+                   onclick="checkPasswords()">
+            <i id='password2Button' class="material-icons material-symbols-outlined mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button" onclick="visible('password2')">visibility_off</i>
         </label>
         <div class="validation mdc-text-field-helper-line">
-            <div id="newPassword2Msg" class="mdc-text-field-helper-text--validation-msg" aria-hidden="true"></div>
+            <div id="password2Msg" class="mdc-text-field-helper-text--validation-msg mdc-text-field-helper-text--validation-msg" aria-hidden="true"></div>
         </div>
 
 

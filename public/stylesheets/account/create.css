@@ -4,8 +4,9 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    font-size: small;
 }
 
 .validation {
-    align-items:flex-end
+    align-items:flex-end;
 }
