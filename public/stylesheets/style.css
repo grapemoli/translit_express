@@ -1,8 +1,18 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+html, body {
+    height: 100%;
+    scroll-behavior: smooth;
 }
 
-a {
-  color: #00B7FF;
+:root {
+    --mdc-theme-primary: #534a48;
+    --mdc-theme-secondary: #506751;
+    --mdc-theme-on-primary: #ded5b9;
+    --mdc-theme-on-secondary: #ded5b9;
 }
+
+body {
+    overflow: auto;
+    padding-top: env(safe-area-inset-top);
+}
+
+
