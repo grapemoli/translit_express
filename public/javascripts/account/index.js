@@ -15,6 +15,8 @@ function toggleEditDialog() {
 function submit() {
     var text = document.getElementById('newUsername').value = '';
     usernameDialog.close();
+
+    document.getElementById('submitUsername').disabled = true;
 }
 
 function validate() {
@@ -27,6 +29,7 @@ function validate() {
 function reset() {
     usernameDialog.close();
     document.getElementById('newUsername').value = '';
+    document.getElementById('submitUsername').disabled = !textHTML.valid;
 }
 
 

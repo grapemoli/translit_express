@@ -1,20 +1,20 @@
-var oldPassword;
+var username;
 var newPassword1;
 var newPassword2;
 var submitButton;
-var oldPasswordError;
+var usernameError;
 var newPassword1Error;
 var newPassword2Error;
 
 
 // Get elements after DOM loads.
 window.addEventListener('load', (event) => {
-    oldPasswordError = new mdc.textfield.MDCTextFieldHelperText(document.getElementById('oldPasswordMsg')).foundation;
+    usernameError = new mdc.textfield.MDCTextFieldHelperText(document.getElementById('usernameMsg')).foundation;
     newPassword1Error = new mdc.textfield.MDCTextFieldHelperText(document.getElementById('newPassword1Msg')).foundation;
     newPassword2Error = new mdc.textfield.MDCTextFieldHelperText(document.getElementById('newPassword2Msg')).foundation;
 
-    var oldPasswordHTML = document.getElementById('oldPassword');
-    oldPassword = new mdc.textfield.MDCTextField(oldPasswordHTML);
+    var usernameHTML = document.getElementById('username');
+    username = new mdc.textfield.MDCTextField(usernameHTML);
 
     var newPassword1HTML = document.getElementById('newPassword1');
     newPassword1 = new mdc.textfield.MDCTextField(newPassword1HTML);
@@ -26,10 +26,10 @@ window.addEventListener('load', (event) => {
 
     // Additional housekeeping, preparing the elements.
     submitButton.disabled = true;
-    oldPasswordError.setValidation(true);
+    usernameError.setValidation(true);
     newPassword1Error.setValidation(true);
     newPassword2Error.setValidation(true);
-    oldPasswordError.showToScreenReader();
+    usernameError.showToScreenReader();
     newPassword1Error.showToScreenReader();
     newPassword2Error.showToScreenReader();
 });
@@ -42,14 +42,14 @@ function validate () {
 
         if (newPassword1.value === newPassword2.value) {
 
-            // Matching passwords. Check if the old password is filled.
-            if (!! oldPassword.value) {
+            // Matching passwords. Check if the usernme is filled.
+            if (!! username.value) {
                 // Valid.
                 clean (true, true, true);
                 submitButton.disabled = false;
             }
             else {
-                // Old password is not filled.
+                // Username is not filled.
                 clean (false, true, true);
             }
 
@@ -67,11 +67,11 @@ function validate () {
 
     } else {
         // One password isn't typed.
-        const old = !!oldPassword.value;
+        const user = !!username.value;
         const new1 = !!newPassword1.value;
         const new2 = !!newPassword2.value;
 
-        clean(old, new1, new2);
+        clean(user, new1, new2);
 
         submitButton.disabled = true;
     }
@@ -92,11 +92,11 @@ function empty(id) {
     }
 }
 
-function clean(old, new1, new2) {
-    if (old) {
-        oldPassword.valid = true;
-        oldPasswordError.setValidity(true);
-        oldPasswordError.setContent('');
+function clean(user, new1, new2) {
+    if (user) {
+        username.valid = true;
+        usernameError.setValidity(true);
+        usernameError.setContent('');
     }
 
     if (new1) {
@@ -121,5 +121,5 @@ function visible(id) {
 }
 
 function submit () {
-    console.log('New Password: ' + newPassword2.value);
+    console.log('New account: ' + username.value + ', ' + newPassword1.value);
 }

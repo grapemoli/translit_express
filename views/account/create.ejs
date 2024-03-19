@@ -33,13 +33,13 @@
 
 <main class="mdc-top-app-bar--fixed-adjust mdc-typography">
 
-    <div class="form-container">
+    <form class="form-container">
         <!-- Form. -->
 
-        <h1 class="mdc-typography--headline5" style="text-align:center">Change Password</h1>
+        <h1 class="mdc-typography--headline5" style="text-align:center">Create an Account</h1>
 
-        <!-- Old Password -->
-        <label id='oldPassword' class="userInput mdc-text-field mdc-text-field--outlined mdc-text-field--no-label mdc-text-field--with-trailing-icon">
+        <!-- Username -->
+        <label id='username' class="userInput mdc-text-field mdc-text-field--outlined mdc-text-field--no-label mdc-text-field--with-trailing-icon">
             <span class="mdc-notched-outline">
                 <span class="mdc-notched-outline__leading"></span>
                 <span class="mdc-notched-outline__notch">
@@ -47,20 +47,19 @@
                 <span class="mdc-notched-outline__trailing"></span>
             </span>
 
-            <input id='oldPasswordInput' class="mdc-text-field__input" type="password"
-                   placeholder="Old Password"
-                   aria-labelledby="oldPassword"
-                   aria-controls="oldPassword"
-                   aria-describedby="oldPassword"
+            <input id='usernameInput' class="mdc-text-field__input" type="password"
+                   placeholder="Username"
+                   aria-labelledby="username"
+                   aria-controls="username"
+                   aria-describedby="username"
                    onkeyup="validate()"
-                   onkeydown="empty('oldPassword')"
-                   onChange="validate('oldPassword')"
-                   onclick="empty('oldPassword')">
+                   onkeydown="empty('username')"
+                   onChange="validate('username')"
+                   onclick="empty('username')">
 
-            <i id='oldPasswordButton' class="material-icons material-symbols-outlined mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button" onclick="visible('oldPassword')">visibility_off</i>
         </label>
         <div class="validation mdc-text-field-helper-line">
-            <div id="oldPasswordMsg" class="mdc-text-field-helper-text--validation-msg" aria-hidden="true"></div>
+            <div id="usernameMsg" class="mdc-text-field-helper-text--validation-msg" aria-hidden="true"></div>
         </div>
 
 
@@ -120,12 +119,12 @@
 
 
         <!-- Submit Button -->
-        <button id='submitButton' class="mdc-button mdc-button--unelevated mdc-ripple-upgraded" onclick="submit()" onsubmit="submit()" disabled>
+        <button id='submitButton' class="mdc-button mdc-button--unelevated mdc-ripple-upgraded" onsubmit="submit()" disabled>
             <div class="mdc-button__ripple"></div>
-            <span class="mdc-button__label">Change Password</span>
+            <span class="mdc-button__label">Create Account</span>
         </button>
 
-    </div>
+    </form>
 </main>
 
 </body>

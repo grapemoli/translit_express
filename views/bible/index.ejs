@@ -2,7 +2,18 @@
 <html>
 <head>
     <title><%= title%>></title>
+
     <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <link rel='stylesheet' href='/stylesheets/bible/index.css'/>
+    <link rel='stylesheet' href='/@material/form-field/dist/mdc.form-field.css'/>
+    <link rel='stylesheet' href='/@material/button/dist/mdc.button.css'/>
+    <link rel='stylesheet' href='/@material/textfield/dist/mdc.textfield.css'/>
+    <link rel='stylesheet' href='/@material/floating-label/dist/mdc.floating-label.css'/>
+
+    <script src='/@material/form-field/dist/mdc.formField.js'></script>
+    <script src="/@material/textfield/dist/mdc.textfield.js"></script>
+    <script src='/@material/floating-label/dist/mdc.floatingLabel.js'></script>
+    <script src='/javascripts/bible/index.js' defer></script>
     <script src='/components/topBar.js' defer></script>
 </head>
 
@@ -12,9 +23,32 @@
     <top-bar></top-bar>
 
     <main class="mdc-top-app-bar--fixed-adjust mdc-typography">
-        <h1><%= title %></h1>
-    </main>
+        <h1 class="mdc-typography--headline5" style="padding: 3%;"><%= title %></h1>
 
+        <form class="mdc-form" style="text-align:center;">
+            <div class="mdc-form-field ">
+                <label id='input' class="mdc-text-field mdc-text-field--filled mdc-ripple-upgraded">
+                    <span class="mdc-text-field__ripple"></span>
+
+                    <input id="userInput" class="mdc-text-field__input" type="text" aria-labelledby="input"
+                           aria-controls="input" aria-describedby="input"
+                           onchange="validate()"
+                           onkeyup="validate()">
+                    <span class="mdc-floating-label mdc-floating-label--float-above">Search for a verse...</span>
+                    <span class="mdc-line-ripple"></span>
+                </label>
+                <div class="mdc-text-field-helper-line">
+            </div>
+
+            <div class="mdc-form-field" onsubmit="submit()">
+                <button id='submitButton' class="mdc-button mdc-button--filled mdc-ripple-upgraded">
+                    <div class="mdc-button__ripple"></div>
+                    <span class="mdc-button__label">Search</span>
+                </button>
+            </div>
+        </form>
+
+    </main>
 </body>
 
 

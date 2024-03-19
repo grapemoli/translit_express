@@ -3,7 +3,7 @@ var router = express.Router();
 
 // Route: Bible
 router.get('/', function (req, res, next) {
-    res.render('bible/index', {title: 'Translit | Search'});
+    res.render('bible/index', {title: 'Search for a Verse'});
 });
 
 router.get('/results', function (req, res, next) {
