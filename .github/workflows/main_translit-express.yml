@@ -50,11 +50,8 @@ jobs:
       id-token: write #This is required for requesting the JWT
 
     steps:
-      - uses: actions/checkout@v4
-
       - name: Unzip artifact for deployment
-        working-directory: ./website
-        run: ls -a && unzip release.zip
+        run: ls -a && unzip website/release.zip
       
       - name: Login to Azure
         uses: azure/login@v1
