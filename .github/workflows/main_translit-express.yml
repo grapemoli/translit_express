@@ -22,7 +22,7 @@ jobs:
           node-version: '20.x'
 
       - name: Print directories
-        run: ls
+        run: ls -a
         
       - name: npm install, build, and test website
         run: |
