@@ -51,7 +51,8 @@ jobs:
 
     steps:
       - name: Unzip artifact for deployment
-        run: unzip ./website/release.zip
+        working-directory: ./website
+        run: ls -a && unzip release.zip
       
       - name: Login to Azure
         uses: azure/login@v1
