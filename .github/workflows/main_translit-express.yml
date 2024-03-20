@@ -15,7 +15,7 @@ jobs:
 
     defaults: 
       run:
-        working-directory: website/
+        working-directory: ./website/
     
     steps:
       - uses: actions/checkout@v4
