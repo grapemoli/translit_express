@@ -23,10 +23,6 @@ jobs:
 
       - name: Print directories
         run: ls
-
-      - name: Print directories after checking out
-        uses: actions/checkout@v4
-        run: ls
         
       - name: npm install, build, and test website
         run: |
