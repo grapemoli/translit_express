@@ -12,6 +12,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    defaults: 
+      run:
+        working-directory: ./website
     
     steps:
       - uses: actions/checkout@v4
@@ -20,9 +24,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
-
-      - name: Print directories
-        run: ls -a
         
       - name: npm install, build, and test website
         run: |
