@@ -93,14 +93,14 @@
 
 
         <!-- Change Username Dialog (toggleable)-->
-        <div class="mdc-dialog mdc-dialog" id="changeUsernameDialog">
+        <form class="mdc-dialog mdc-dialog" id="changeUsernameDialog" action="account" method="post">
             <div class="mdc-dialog__container">
                 <div tabindex="0" aria-hidden="true" class="mdc-dom-focus-sentinel"></div>
                 <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-describedby="ember202__content">
                     <h2 class="mdc-dialog__title">Change Username</h2>
                     <div class="mdc-dialog__content">
                         <label class="mdc-text-field mdc-text-field--outlined mdc-text-field--no-label">
-                            <input id="newUsername" name='newUsername' class="mdc-text-field__input" type="text" onchange="validate()" onkeyup="validate()">
+                            <input id="newUsername" name='username' class="mdc-text-field__input" type="text" onchange="validate()" onkeyup="validate()">
                             <span class="mdc-notched-outline mdc-notched-outline--no-label">
                             <span class="mdc-notched-outline__leading"></span>
                             <span class="mdc-notched-outline__notch"></span>
@@ -118,7 +118,7 @@
                         </button>
 
                         <button class="mdc-button mdc-ripple-upgraded" data-mdc-dialog-action="ok" type="submitPassword"
-                                id="submitUsername" onclick="submit()">
+                                id="submitUsername">
                             <div class="mdc-button__ripple"></div>
                             <span class="mdc-button__label">Save</span>
                         </button>
@@ -127,7 +127,7 @@
                 <div tabindex="0" aria-hidden="true" class="mdc-dom-focus-sentinel"></div>
             </div>
             <div class="mdc-dialog__scrim"></div>
-        </div>
+        </form>
 
     </main>
 </body>

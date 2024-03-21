@@ -5,6 +5,9 @@ window.addEventListener('load', (event) => {
     var usernameHTML = document.getElementById('changeUsernameDialog');
     usernameDialog = new mdc.dialog.MDCDialog(usernameHTML);
 
+
+    // Reset fields, buttons in case the user revisits this route.
+    usernameDialog.value = '';
     document.getElementById('submitUsername').disabled = true;
 });
 
