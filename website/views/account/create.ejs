@@ -34,7 +34,7 @@
 
 <main class="mdc-top-app-bar--fixed-adjust mdc-typography">
 
-    <form class="form-container">
+    <form class="form-container" action="create" method="post" enctype="multipart/form-data">
         <!-- Form. -->
 
         <h1 class="mdc-typography--headline5" style="text-align:center">Create an Account</h1>
@@ -48,7 +48,7 @@
             </span>
             <span class="mdc-notched-outline__trailing"></span>
           </span>
-            <input id='usernameInput' class="mdc-text-field__input" type="text"
+            <input id='usernameInput' name='username' class="mdc-text-field__input" type="text"
                    aria-labelledby="username"
                    aria-controls="username"
                    aria-describedby="username"
@@ -71,7 +71,7 @@
             </span>
             <span class="mdc-notched-outline__trailing"></span>
           </span>
-            <input id='password1Input' class="mdc-text-field__input" type="password"
+            <input id='password1Input' name='password' class="mdc-text-field__input" type="password"
                    aria-labelledby="password1"
                    aria-controls="password1"
                    aria-describedby="password1"
@@ -109,7 +109,7 @@
 
 
         <!-- Submit Button -->
-        <button id='submitButton' class="mdc-button mdc-button--unelevated mdc-ripple-upgraded" onsubmit="submit()" disabled>
+        <button id='submitButton' class="mdc-button mdc-button--unelevated mdc-ripple-upgraded" disabled>
             <div class="mdc-button__ripple"></div>
             <span class="mdc-button__label">Create Account</span>
         </button>
