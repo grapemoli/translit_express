@@ -35,18 +35,19 @@
     <top-bar></top-bar>
 
     <main class="mdc-top-app-bar--fixed-adjust mdc-typography">
-        <h1 class="mdc-typography--headline5" style="padding: 3%;"><%= title %></h1>
-
         <form class="form-container" style="text-align:center;">
+            <label class="mdc-typography--headline5" style="text-align:left"><%= title %></label>
                 <label id='input' class="mdc-text-field mdc-text-field--filled mdc-ripple-upgraded mdc-text-field--with-leading-icon">
                     <span class="mdc-text-field__ripple"></span>
 
-                    <i id='searchIcon' class="material-icons material-symbols-outlined mdc-text-field__icon mdc-text-field__icon--leading">Search</i>
-                    <input id="userInput" class="mdc-text-field__input" type="text" aria-labelledby="input"
-                           placeholder="Enter keywords..."
-                           aria-controls="input" aria-describedby="input"
-                           onchange="validate()"
-                           onkeyup="validate()">
+                    <span class="center-container">
+                        <i id='searchIcon' class="material-icons material-symbols-outlined mdc-text-field__icon mdc-text-field__icon--leading">Search</i>
+                        <input id="userInput" class="mdc-text-field__input" type="text" aria-labelledby="input"
+                               placeholder="Enter keywords..."
+                               aria-controls="input" aria-describedby="input"
+                               onchange="validate()"
+                               onkeyup="validate()">
+                    </span>
                     <!--
                     <span class="mdc-floating-label mdc-floating-label--float-above">Enter keywords...</span>
                     -->

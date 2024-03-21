@@ -1,7 +1,8 @@
 # Tranlit Express
+In lieu of being unable to successfully deploy the Ember.js version to Azure, I shift to using
+ExpressJS as the MS docs use ExpressJS in their deployment example.
 
-In lieu of being unable to successfully deploy Ember.js to Azure, I shift to using
-ExpressJS as the MS docs use ExpressJS in their deployment example. 
+<hr>
 
 ## Running the Application
 
