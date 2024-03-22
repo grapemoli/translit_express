@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Saved = require('./saved');
 const bcrypt = require('bcrypt');
 
-const userSchema = new mongoose.Schema({
+const schema = new mongoose.Schema({
     username: {
         type: String,
         unique: true,
@@ -28,9 +28,8 @@ const userSchema = new mongoose.Schema({
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'Saved'
     }
-},
-    {
-        collection: 'User'
-    });
+});
 
-module.exports = mongoose.model('User', userSchema);
+
+
+module.exports = mongoose.model('User', schema);

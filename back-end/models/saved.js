@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Book = require('./book')
 
-const savedSchema = new mongoose.Schema({
+const schema = new mongoose.Schema({
     book: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Book',
@@ -38,9 +38,6 @@ const savedSchema = new mongoose.Schema({
         required: true,
         index: true
     }
-},
-    {
-        collection: 'Saved'
-    });
+});
 
-module.exports = mongoose.model('Saved', savedSchema);
+module.exports = mongoose.model('Saved', schema);
