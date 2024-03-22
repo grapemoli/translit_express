@@ -30,22 +30,30 @@ router.get('/create', function (req, res, next) {
 router.post('/create', upload.none(), function (req, res, next) {
     try {
         // Check that the username does not exist. Usernames must be unique.
-        const user = User.findOne({username: req.body.username});
+        const user = User.findOne({username: req.body.username}).then(async (result) => {
+            if (!!!result) {
+                // User does not exist. Make the model, and redirect the user to the login.
+                await bcrypt
+                    .hash(req.body.password, 10)
+                    .then(hash => {
+                        const newUser = new User({
+                            username:req.body.username,
+                            password: hash
+                        });
 
-        if (!!!user) {
-            // User does not exist. Make the model, and redirect the user to the login.
-            const newUser = new User({
-                username:req.body.username,
-                password: req.body.password
-            });
-
-            newUser.save();
-            res.redirect(`login/${RE_OK}`);
-        }
-        else {
-            // User exists. Redirect to the validation page?
-            res.render(`account/create`, {title: 'Create Account', error: 'This username is taken.'});
-        }
+                        newUser.save().then(() => {
+                            res.redirect(`login/${RE_OK}`);
+                        });
+                    })
+                    .catch((err) => {
+                        res.render('account/create', {title: 'Create Account', error: err.message})
+                    });
+            }
+            else {
+                // User already exists.
+                res.render(`account/create`, {title: 'Create Account', error: 'This username is taken.'});
+            }
+        });
     } catch (err) {
         res.render('account/create', {title: 'Create Account', error: err.message});
     }
@@ -63,25 +71,25 @@ router.post('/login', upload.none(), async function (req, res, next) {
 
     try {
         // Find if the user exists.
-        const user = await User.findOne({username: username});
-
-        if (!!!user) {
-            // User does not exist.
-            res.render('account/login', {title: 'Sign In', error: 'This account does not exist.'});
-        }
-        else {
-            // Find if the password matches the user.
-            const isValid = await bcrypt.compare (password, user.password);
-
-            if (isValid) {
-                // Valid password. Redirect home.
-                res.redirect('/');
+        const user = User.findOne({username: username}).then(async(result) => {
+            if (!!!result) {
+                // User does not exist.
+                res.render('account/login', {title: 'Sign In', error: 'This account does not exist.'});
             }
             else {
-                res.render('account/login', {title: 'Sign In', error: 'The password was incorrect.'});
-
+                // User exists.
+                const isValid = await bcrypt.compare(password, result.password).then((valid) => {
+                    if (valid) {
+                        // Credentials are valid.
+                        res.redirect('/');
+                    }
+                    else {
+                        // Username exists but the password is wrong.
+                        res.render('account/login', {title: 'Sign In', error: 'The password was incorrect.'});
+                    }
+                });
             }
-        }
+        });
     }
     catch (err) {
         res.render('account/login', {title: 'Sign In', error: err.message});

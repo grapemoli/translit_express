@@ -94,7 +94,7 @@ async function hashPassword(password) {
     //const salt = bcrypt.genSaltSync(saltRounds);
     //const hashedPassword = bcrypt.hashSync('asdf', salt);
     await bcrypt
-        .hash(password, saltRounds)
+        .hash(password, process.env.SALT_ROUNDS)
         .then(hash => {
             console.log('Hash', hash);
             return(hash);
