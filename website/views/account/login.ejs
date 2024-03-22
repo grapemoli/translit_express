@@ -86,6 +86,12 @@
             <span class="mdc-button__label">Create Account</span>
         </button>
 
+
+        <!-- Validation Message for account credentials failing or not existing. -->
+        <div class="validation mdc-text-field-helper-line">
+            <div id="accountMsg" class="mdc-text-field-helper-text--validation-msg mdc-text-field-helper-text--validation-msg" aria-hidden="<%=error === ''%>"><%=error%></div>
+        </div>
+
     </form>
 </main>
 </body>

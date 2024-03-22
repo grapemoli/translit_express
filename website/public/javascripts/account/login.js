@@ -3,6 +3,7 @@ var password;
 var usernameError;
 var passwordError;
 var submitButton;
+var accountError;
 
 
 // Get elements after DOM loads.
@@ -15,6 +16,8 @@ window.addEventListener('load', (event) => {
 
     var passwordHTML = document.getElementById('password');
     password = new mdc.textfield.MDCTextField(passwordHTML);
+
+    accountError = new mdc.textfield.MDCTextFieldHelperText(document.getElementById('accountMsg')).foundation;
 
     submitButton = document.getElementById('submitButton');
 
