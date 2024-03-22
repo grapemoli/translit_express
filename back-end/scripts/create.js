@@ -3,7 +3,6 @@
  * Dedicated to creating and populating collections.
  * ***********************************************************************************/
 // Read .env file and set environment variables
-require('dotenv').config({path: './.env'});
 
 // Use official mongodb driver to connect to the server
 const { MongoClient } = require('mongodb');
