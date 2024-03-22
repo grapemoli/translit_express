@@ -5,6 +5,7 @@ const schema = new mongoose.Schema({
         type: String,
         trim: true,
         required: true,
+        unique: true,
         index: true
     },
 

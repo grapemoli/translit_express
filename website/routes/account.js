@@ -6,10 +6,12 @@ const bcrypt = require('bcrypt');
 var User = require('../models/user');
 
 // Error codes.
-const DNE = "300";
-const WRONG_PASSWORD = "400";
-const UNDEFINED = "500";
-const OK = "1"
+const DNE = "300";                      // Account DNE.
+const EXISTS = "350";                   // Account exists.
+const WRONG_PASSWORD = "400";           // Account exists, but wrong password.
+const UNDEFINED = "500";                // Undefined issue.
+const OK = "1";                         // Acknowledged / OK / Good request.
+const RE_OK ="2";                       // Good request, but the user needs to sign in again.
 
 
 // Route: account
@@ -22,11 +24,31 @@ router.post('/', upload.none(),function (req, res, next) {
 });
 
 router.get('/create', function (req, res, next) {
-    res.render('account/create', {title: 'Create Account'});
+    res.render('account/create', {title: 'Create Account', error: ''});
 });
 
 router.post('/create', upload.none(), function (req, res, next) {
-    res.render('account/create', {title: 'Create Account'});
+    try {
+        // Check that the username does not exist. Usernames must be unique.
+        const user = User.findOne({username: req.body.username});
+
+        if (!!!user) {
+            // User does not exist. Make the model, and redirect the user to the login.
+            const newUser = new User({
+                username:req.body.username,
+                password: req.body.password
+            });
+
+            newUser.save();
+            res.redirect(`login/${RE_OK}`);
+        }
+        else {
+            // User exists. Redirect to the validation page?
+            res.render(`account/create`, {title: 'Create Account', error: 'This username is taken.'});
+        }
+    } catch (err) {
+        res.render('account/create', {title: 'Create Account', error: err.message});
+    }
 });
 
 router.get('/login', function (req, res, next) {
@@ -41,52 +63,28 @@ router.post('/login', upload.none(), async function (req, res, next) {
 
     try {
         // Find if the user exists.
-        const user = await User.findOne({username: username})
+        const user = await User.findOne({username: username});
 
         if (!!!user) {
-            res.redirect(`/account/login/${DNE}`);
-            // Uncomment if you want the JSON response.
-            /*
-            return res.status(401).json({
-                status: "failed",
-                data: [req.body.username, req.body.password],
-                message:
-                    "This user does not exist.",
-            });
-             */
+            // User does not exist.
+            res.render('account/login', {title: 'Sign In', error: 'This account does not exist.'});
         }
         else {
             // Find if the password matches the user.
             const isValid = await bcrypt.compare (password, user.password);
+
             if (isValid) {
                 // Valid password. Redirect home.
                 res.redirect('/');
             }
             else {
-                res.redirect(`/account/login/${WRONG_PASSWORD}`);
-                // Uncomment if you would rather the JSON response be sent.
-                /*
-                return res.status(401).json({
-                    status: "Failed",
-                    data: [],
-                    message:
-                        "Incorrect password.",
-                });
-                 */
+                res.render('account/login', {title: 'Sign In', error: 'The password was incorrect.'});
+
             }
         }
     }
     catch (err) {
-        res.redirect(`/account/login/${UNDEFINED}`);
-        // Uncomment if you want the JSON response.
-        /*
-        res.status(500).json({
-            status: "error",
-            code: 500,
-            data: [err.message],
-            message: "Internal Server Error",
-        });
-         */
+        res.render('account/login', {title: 'Sign In', error: err.message});
     }
 });
 
@@ -103,6 +101,9 @@ router.get('/login/:id', function (req, res){
         }
         else if (req.params['id'] === WRONG_PASSWORD) {
             error_msg = 'This password is incorrect.';
+        }
+        else if (req.params['id'] === RE_OK) {
+            error_msg = 'Account created! Please sign in with your new credentials.';
         }
         else {
             error_msg = 'Something went wrong. Try again later.';

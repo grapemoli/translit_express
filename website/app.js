@@ -29,7 +29,7 @@ mongoose.connection.on('disconnecting', () => console.log('--- Disconnecting fro
 mongoose.connection.on('close', () => console.log('--- Closed connection to MONGODB. ---'));
 
 
-// Database connection setup.
+// Connect Mongoose to the database. This also populates the Models.
 async function getDatabase() {
     // Database configuration.
     var configData = require('./config/connection');
