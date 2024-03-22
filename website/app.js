@@ -4,6 +4,11 @@ var path = require('path');
 var mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const bcrypt = require('bcrypt');
+
+var User = require(__dirname + '/models/user');
+var Book = require(__dirname + '/models/book');
+var Saved = require(__dirname + '/models/saved');
 
 // Dependencies.
 var indexRouter = require('./routes/index');
@@ -13,6 +18,26 @@ var accountRouter = require('./routes/account');
 
 
 var app = express();
+
+
+// Set up event emitters. These will tell the console of any database problems if they arise.
+mongoose.connection.on('open', () => console.log('+++ Open connection to MONGODB +++ '));
+mongoose.connection.on('connected', () => console.log('+++ Connected to MONGODB +++'));
+mongoose.connection.on('disconnected', () => console.log('--- Disconnected from MONGODB ---'));
+mongoose.connection.on('reconnected', () => console.log('... Reconnected to MONGODB ...'));
+mongoose.connection.on('disconnecting', () => console.log('--- Disconnecting from MONGODB ---'));
+mongoose.connection.on('close', () => console.log('--- Closed connection to MONGODB. ---'));
+
+
+// Database connection setup.
+async function getDatabase() {
+    // Database configuration.
+    var configData = require('./config/connection');
+    const connectionInfo = await configData.getConnectionInfo();
+    var db = await mongoose.connect(connectionInfo.DATABASE_URL);
+}
+getDatabase();
+
 
 // Common session values across routers.
 app.use(function(req, res, next){
@@ -45,6 +70,7 @@ app.use('/@material', express.static(__dirname + '/node_modules/@material/'));
 app.use('/@material-ui', express.static(__dirname + '/node_modules/@material-ui/'));
 app.use('/materialize-css', express.static(__dirname + '/node_modules/materialize-css/'));
 
+
 // Catch 404 and forward to error handler.
 app.use(function (req, res, next) {
     next(createError(404));
@@ -60,17 +86,5 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
-
-
-// Database setup.
-async function getDatabase() {
-    // Database configuration.
-    var configData = require('./config/connection');
-    var connectionInfo = await configData.getConnectionInfo();
-    mongoose.connect(connectionInfo.DATABASE_URL);
-
-}
-getDatabase();
-
 
 module.exports = app;
