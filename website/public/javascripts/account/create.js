@@ -134,7 +134,3 @@ function visible(id) {
 
     checkPasswords();
 }
-
-function submit () {
-    console.log('New account: ' + username.value + ', ' + password1.value);
-}

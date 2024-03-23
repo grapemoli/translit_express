@@ -21,7 +21,3 @@ function reset() {
     searchInput.value = '';
     submit.disabled = true;
 }
-
-function submit() {
-    console.log("Searching: " + searchInput.value);
-}

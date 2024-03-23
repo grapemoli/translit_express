@@ -57,7 +57,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/bible', bibleRouter);
-app.use('/bible/results', bibleRouter);
+app.use('/bible/result', bibleRouter);
 app.use('/bible/translate', bibleRouter);
 app.use('/account', accountRouter);
 app.use('/account/login', accountRouter);
@@ -66,9 +66,10 @@ app.use('/account/password', accountRouter);
 app.use('/saved', savedRouter);
 
 // Middleware, exposing redirecting html/css paths.
-app.use('/@material', express.static(__dirname + '/node_modules/@material/'));
-app.use('/@material-ui', express.static(__dirname + '/node_modules/@material-ui/'));
-app.use('/materialize-css', express.static(__dirname + '/node_modules/materialize-css/'));
+app.use('/@material', express.static(path.join(__dirname, 'node_modules', '@material')));
+app.use('/@material-ui', express.static(path.join(__dirname, 'node_modules', '@material-ui')));
+app.use('/materialize-css', express.static(path.join(__dirname, 'node_modules', 'materialize-css')));
+app.use('/path', express.static(path.join(__dirname, 'node_modules', 'path')));
 
 
 // Catch 404 and forward to error handler.

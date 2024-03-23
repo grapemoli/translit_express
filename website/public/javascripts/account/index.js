@@ -15,13 +15,6 @@ function toggleEditDialog() {
     usernameDialog.open();
 }
 
-function submit() {
-    var text = document.getElementById('newUsername').value = '';
-    usernameDialog.close();
-
-    document.getElementById('submitUsername').disabled = true;
-}
-
 function validate() {
     var textHTML = document.getElementById('newUsername');
     textHTML.valid = (textHTML.value.length > 0);

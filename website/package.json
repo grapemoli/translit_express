@@ -8,8 +8,8 @@
   "dependencies": {
     "@azure/identity": "^4.0.1",
     "@azure/keyvault-secrets": "^4.8.0",
+    "@google/generative-ai": "^0.3.1",
     "@material-ui/core": "^4.12.4",
-    "@material/animation": "^14.0.0",
     "@material/button": "^14.0.0",
     "@material/card": "^14.0.0",
     "@material/checkbox": "^14.0.0",
@@ -20,6 +20,7 @@
     "@material/floating-label": "^14.0.0",
     "@material/form-field": "^14.0.0",
     "@material/icon-button": "^14.0.0",
+    "@material/linear-progress": "^14.0.0",
     "@material/list": "^14.0.0",
     "@material/menu": "^14.0.0",
     "@material/menu-surface": "^14.0.0",
@@ -43,6 +44,7 @@
     "mongoose": "^8.2.2",
     "morgan": "~1.9.1",
     "multer": "^1.4.5-lts.1",
+    "path": "^0.12.7",
     "uniq": "^1.0.1"
   }
 }

@@ -84,7 +84,3 @@ function visible(id) {
     var button = document.getElementById(id + 'Button');
     button.innerText = (button.innerText === 'visibility' ? 'visibility_off' : 'visibility')
 }
-
-function submit () {
-    console.log('Logged in: ' + username.value + ', ' + password.value);
-}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+    <link rel='stylesheet' href='/stylesheets/bible/result.css'/>
+    <link rel='stylesheet' href='/@material/typography/dist/mdc.typography.css'/>
+
+    <script src='/components/topBar.js' type="text/javascript" defer></script>
+</head>
+
+<top-bar></top-bar>
+
+<main class="result-container mdc-top-app-bar--fixed-adjust mdc-typography">
+    <label class="mdc-typography--headline5">Results</label>
+
+    <!--The result format: @flag#book#chapter#verseNumber#verse#version ... @flag (delimiter -->
+    <div class="mdc-typography--header3" id="results"></div>
+
+    <script>
+        const resultString = '<%-result%>'
+
+        const resultsElement = document.getElementById('results')
+
+        // Check that there was no result.
+        if (resultString === '@none') {
+            // No results. Stop now.
+            const newElement = document.createElement('p');
+            const content = document.createTextNode('No results.');
+            newElement.appendChild(content);
+            newElement.className = 'mdc-typography--header3';
+            resultsElement.appendChild(newElement);
+        }
+        else if (resultString.includes('GoogleGenerativeAI Error')) {
+            // An error occured.
+            const newElement = document.createElement('p');
+            const content = document.createTextNode('An error occurred. Try again later.');
+            newElement.appendChild(content);
+            newElement.className = 'mdc-typography--header3';
+            resultsElement.appendChild(newElement);
+        }
+        else {
+            // There are results, so parse through the results.
+            var verses = resultString.split('@');
+
+            for(var i = 0; i < verses.length; i++) {
+
+                if (verses[i] !== '') {
+                    // book#chapter#verseNumber#verse#bibleVersion
+                    const verse = verses[i].split('#');
+
+                    var verseDiv = document.createElement('div');
+
+                    // Book Chapter:Verse (Version)
+                    const titleElement = document.createElement('h3');
+                    const title = document.createTextNode(verse[0] + ' ' + verse[1] + ':' + verse[2] + ' (' + verse[4] + ')');
+                    titleElement.appendChild(title);
+                    titleElement.className = 'mdc-typography--header3';
+                    verseDiv.append(titleElement);
+
+                    // Verse.
+                    const textElement = document.createElement('p');
+                    const text = document.createTextNode(verse[3]);
+                    textElement.appendChild(text);
+                    textElement.className = 'mdc-typography--header3';
+                    verseDiv.append(textElement);
+                    verseDiv.append(document.createElement('br'))
+
+                    resultsElement.appendChild(verseDiv);
+                }
+            }
+        }
+    </script>
+</main>
+
+</body>
+</html>

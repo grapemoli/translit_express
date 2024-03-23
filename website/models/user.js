@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Saved = require('./saved');
 const bcrypt = require('bcrypt');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const userSchema = new mongoose.Schema({
     username: {

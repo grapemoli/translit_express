@@ -134,7 +134,3 @@ function visible(id) {
 
     checkPasswords();
 }
-
-function submit () {
-    console.log('New password: ' + oldPassword.value + '-->' + newPassword1.value);
-}
