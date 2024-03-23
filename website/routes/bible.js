@@ -7,6 +7,7 @@ var Book = require('../models/book');
 var Saved = require('../models/saved');
 
 
+
 // Route: Bible
 router.get('/', function (req, res, next) {
     res.render('bible/index', {title: 'Search for a Verse'});

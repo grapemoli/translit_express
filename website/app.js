@@ -49,12 +49,14 @@ async function getDatabase() {
 getDatabase();
 
 
-// Set cookie for auth.
+// Set cookie for auth, set global variables.
 app.use(session({
     name: 'translite-cookie',
     keys: [process.env.COOKIE_SECRET],
     maxAge: 24 * 60 * 60 * 1000             // 24 hours
 }));
+
+app.locals.snackbar = '';
 
 
 // View engine setup.

@@ -8,6 +8,7 @@ async function putKeyVaultSecretInEnvVar() {
 
     console.log(secretName);
     console.log(keyVaultName);
+    console.log("hi")
 
     if (!secretName || !keyVaultName) throw Error("getSecret: Required params missing");
 

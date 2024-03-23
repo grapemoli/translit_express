@@ -191,6 +191,22 @@
                 <div class="mdc-dialog__scrim"></div>
             </form>
         <%}%>
+
+
+        <!-- Snack bar for notifications from updates. -->
+        <%if (snackbar !== '') {%>
+            <aside id='snackbar' class="mdc-snackbar">
+                <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
+                    <div class="mdc-snackbar__label" aria-atomic="false">
+                        <%=snackbar%>
+                    </div>
+                    <div class="mdc-snackbar__actions">
+                        <button class="mdc-icon-button mdc-snackbar__dismiss material-icons material-symbols-outlined" style='color:floralwhite;' onclick='closeSnackbar()' ="Dismiss">close</button>
+                    </div>
+                </div>
+            </aside>
+        <%}%>
+
     </main>
 </body>
 

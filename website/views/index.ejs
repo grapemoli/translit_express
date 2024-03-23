@@ -6,6 +6,7 @@
     <link rel='stylesheet' href='/@material/theme/dist/mdc.theme.css'/>
     <link rel='stylesheet' href='/@material/top-app-bar/dist/mdc.top-app-bar.css'/>
     <link rel='stylesheet' href='/@material/icon-button/dist/mdc.icon-button.css'/>
+    <link rel="stylesheet" href="/@material/snackbar/dist/mdc.snackbar.css">
     <link rel='stylesheet' href='/stylesheets/style.css'/>
     <link rel='stylesheet' href='/stylesheets/index.css'/>
 
@@ -15,6 +16,8 @@
 
     <script src='/@material/top-app-bar/dist/mdc.topAppBar.js'></script>
     <script src='/@material/icon-button/dist/mdc.iconButton.js'></script>
+    <script src='/@material/snackbar/dist/mdc.snackbar.js'></script>
+    <script src='/javascripts/index.js'></script>
     <script src='/components/topBar.js' type="text/javascript" defer></script>
 
     <style>
@@ -41,6 +44,21 @@
         </h1>
 
         <p class="mdc-typography--p"><%=book%> <%=chapt%>:<%=num%> (<%=ver%>)</p>
+
+
+        <!-- Snack bar for notifications from updates. -->
+        <%if (snackbar !== '') {%>
+        <aside id='snackbar' class="mdc-snackbar">
+            <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
+                <div class="mdc-snackbar__label" aria-atomic="false">
+                    <%=snackbar%>
+                </div>
+                <div class="mdc-snackbar__actions">
+                    <button class="mdc-icon-button mdc-snackbar__dismiss material-icons material-symbols-outlined" style='color:floralwhite;' onclick='closeSnackbar()' ="Dismiss">close</button>
+                </div>
+            </div>
+        </aside>
+        <%}%>
     </main>
 
 

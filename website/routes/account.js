@@ -16,7 +16,7 @@ const RE_OK ="2";                       // Good request, but the user needs to s
 
 // Route: account
 router.get('/', function (req, res, next) {
-    res.render('account', {title: 'Translit | Account', username: req.session.username});
+    res.render('account', {title: 'Translit | Account', username: req.session.username, snackbar: ''});
 });
 
 router.post('/', upload.none(),function (req, res, next) {
@@ -25,10 +25,11 @@ router.post('/', upload.none(),function (req, res, next) {
     User.init().then(() => {
         User.findOneAndUpdate({username: req.session.username}, {username: req.body.username}).then(()=>{
             req.session.username = req.body.username;
-            console.log(req.session.username);
-            res.render('account', {title: 'Translit | Account', username: req.session.username});
+            // Successfully changed the username.
+            res.render('account', {title: 'Translit | Account', username: req.session.username, snackbar: 'Successfully changed username.'});
         }).catch((err)=>{
-            res.render('account', {title: 'Translit | Account', username: req.session.username});
+            // Something went wrong.
+            res.render('account', {title: 'Translit | Account', username: req.session.username, snackbar: 'This username is already taken. Try again.'});
         });
     });
 });
@@ -36,6 +37,7 @@ router.post('/', upload.none(),function (req, res, next) {
 router.get('/create', function (req, res, next) {
     if(req.session.isAuth) {
         // User who are logged in cannot access this page.
+        req.app.locals.snackbar = 'You are logged in.';
         res.redirect('/');
     }
     else {
@@ -59,10 +61,12 @@ router.post('/create', upload.none(), function (req, res, next) {
                         });
 
                         newUser.save().then(() => {
+                            // Successfully made the account.
                             res.redirect(`login/${RE_OK}`);
                         });
                     })
                     .catch((err) => {
+                        // Something went wrong.
                         res.render('account/create', {title: 'Create Account', error: err.message})
                     });
             }
@@ -72,6 +76,7 @@ router.post('/create', upload.none(), function (req, res, next) {
             }
         });
     } catch (err) {
+        // Something went wrong.
         res.render('account/create', {title: 'Create Account', error: err.message});
     }
 });
@@ -79,6 +84,7 @@ router.post('/create', upload.none(), function (req, res, next) {
 router.get('/login', function (req, res, next) {
     if (req.session.isAuth) {
         // Logged in users do not get access to this page.
+        req.app.locals.snackbar = 'You are already logged in.';
         res.redirect('/');
     }
     else {
@@ -107,6 +113,7 @@ router.post('/login', upload.none(), async function (req, res, next) {
                         // Credentials are valid.
                         req.session.isAuth = true;
                         req.session.username = result.username;
+                        req.app.locals.snackbar = 'Successfully signed in.';
                         res.redirect('/');
                     }
                     else {
@@ -125,6 +132,7 @@ router.post('/login', upload.none(), async function (req, res, next) {
 router.get('/login/:id', function (req, res){
     if (req.session.isAuth) {
         // Logged in users do not get access to this page.
+        req.app.locals.snackbar = 'You are logged in.';
         res.redirect('/');
     }
     else {
@@ -159,7 +167,7 @@ router.post('login/:id', function(req, res){
 
 
 router.get('/password', function (req, res, next) {
-    res.render('account/password', {title: 'Change Password', username: req.session.username});
+    res.render('account/password', {title: 'Change Password', username: req.session.username, error: ''});
 });
 
 router.post('/password', upload.none(), async function (req, res, next) {
@@ -171,7 +179,6 @@ router.post('/password', upload.none(), async function (req, res, next) {
     await User.findOne({username: req.session.username}).then((user) => {
         // Check the hash and input match.
         bcrypt.compare(req.body.oldPassword, user.password).then(async (result) => {
-            console.log('2')
             if (result) {
 
                 // User typed in the right password.
@@ -179,15 +186,19 @@ router.post('/password', upload.none(), async function (req, res, next) {
 
                     // Update the field.
                     User.findOneAndUpdate({username:req.session.username}, {password: newHash}).then(() => {
+                        req.app.locals.snackbar = 'Password has been updated.';
                         res.redirect('/');
                     });
                 });
             }
             else {
                 // User typed in the incorrect password for their account.
-                res.render('account/password', {title: 'Change Password', username: req.session.username});
+                res.render('account/password', {title: 'Change Password', username: req.session.username, error: 'Incorrect password, failed to change password.'});
             }
         });
+    }).catch((err) => {
+        // Something went wrong.
+        res.render('account/password', {title: 'Change Password', username: req.session.username, error: 'Something went wrong. Try again later.'});
     });
 });
 
@@ -197,6 +208,7 @@ router.post('/logout', function(req, res){
     req.session.isAuth = false;
     req.session = null;
 
+    req.app.locals.snackbar = 'Signed out.';
     res.redirect('/');
 });
 
