@@ -49,8 +49,9 @@ router.post('/create', upload.none(), function (req, res, next) {
         const user = User.findOne({username: req.body.username}).then(async (result) => {
             if (!!!result) {
                 // User does not exist. Make the model, and redirect the user to the login.
+                const salt = bcrypt.genSaltSync(10);
                 await bcrypt
-                    .hash(req.body.password, 10)
+                    .hash(req.body.password, salt)
                     .then(hash => {
                         const newUser = new User({
                             username:req.body.username,
@@ -161,8 +162,33 @@ router.get('/password', function (req, res, next) {
     res.render('account/password', {title: 'Change Password', username: req.session.username});
 });
 
-router.post('/password', upload.none(), function (req, res, next) {
-    res.render('account/password', {title: 'Change Password', username: req.session.username});
+router.post('/password', upload.none(), async function (req, res, next) {
+    // Check that the old password is right, then change to the new password.
+    console.log(req.body.newPassword);
+    console.log(req.body.oldPassword);
+    const salt = bcrypt.genSaltSync(10);
+
+    await User.findOne({username: req.session.username}).then((user) => {
+        // Check the hash and input match.
+        bcrypt.compare(req.body.oldPassword, user.password).then(async (result) => {
+            console.log('2')
+            if (result) {
+
+                // User typed in the right password.
+                await bcrypt.hash(req.body.newPassword, salt).then((newHash) => {
+
+                    // Update the field.
+                    User.findOneAndUpdate({username:req.session.username}, {password: newHash}).then(() => {
+                        res.redirect('/');
+                    });
+                });
+            }
+            else {
+                // User typed in the incorrect password for their account.
+                res.render('account/password', {title: 'Change Password', username: req.session.username});
+            }
+        });
+    });
 });
 
 router.post('/logout', function(req, res){

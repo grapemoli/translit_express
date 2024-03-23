@@ -1,4 +1,4 @@
-require("dotenv").config();               // TODO comment this out for production.
+//require("dotenv").config();               // TODO comment this out for production.
 const mongoose = require("mongoose");
 const { getSecret } = require("./keyvault");
 
