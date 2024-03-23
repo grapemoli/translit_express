@@ -5,7 +5,6 @@ const upload = multer();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 var Book = require('../models/book');
 var Saved = require('../models/saved');
-//require('dotenv').config();       // TODO comment when in production.
 
 
 // Route: Bible
