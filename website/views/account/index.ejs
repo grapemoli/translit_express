@@ -46,54 +46,81 @@
                 <span class="mdc-deprecated-list-item__ripple"></span>
                 <span class="mdc-deprecated-list-item__text">
                 <span class="mdc-deprecated-list-item__primary-text">Username</span>
-                <span class="mdc-deprecated-list-item__secondary-text">Not signed in</span>
+                <span class="mdc-deprecated-list-item__secondary-text">
+                    <%if (!!!username){%>
+                        Not signed in
+                    <%}else{%>
+                        <%=username%>
+                    <%}%>
+                </span>
             </span>
+
                 <span id='changeUsernameListItem' class="material-icons mdc-icon-button mdc-deprecated-list-item__meta"
-                      aria-hidden="true" onclick="toggleEditDialog()">
-                <div class="mdc-icon-button__ripple"></div>
-                <span class="mdc-icon-button__focus-ring"></span>
-                <span class="material-symbols-outlined">edit</span>
-            </span>
+                          aria-hidden="true" onclick="toggleEditDialog()">
+                    <div class="mdc-icon-button__ripple"></div>
+                    <span class="mdc-icon-button__focus-ring"></span>
+                    <span class="material-symbols-outlined">edit</span>
+                </span>
             </li>
 
             <li role="separator" class="mdc-deprecated-list-divider"></li>
 
-            <li class="mdc-deprecated-list-item" onclick="toChangePassword()">
-                <span class="mdc-deprecated-list-item__ripple"></span>
-                <span class="mdc-deprecated-list-item__text">
-          <span class="mdc-deprecated-list-item__primary-text">Change Password</span>
-          <span class="mdc-deprecated-list-item__secondary-text">Click here to change your password</span>
-        </span>
-            </li>
 
-            <li class="mdc-deprecated-list-item" onclick="signOut()">
-                <span class="mdc-deprecated-list-item__ripple"></span>
-                <span class="mdc-deprecated-list-item__text">
-          <span class="mdc-deprecated-list-item__primary-text">Sign Out</span>
-          <span class="mdc-deprecated-list-item__secondary-text">Click here to sign out</span>
-        </span>
-            </li>
+            <!-- Only logged in clients can change password or log out. -->
+            <%if (!!username){%>
+                <li class="mdc-deprecated-list-item" onclick="toChangePassword()">
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <span class="mdc-deprecated-list-item__text">
+                    <span class="mdc-deprecated-list-item__primary-text">Change Password</span>
+                <span class="mdc-deprecated-list-item__secondary-text">Click here to change your password</span>
+                </span>
+                </li>
+
+                <form method="POST" action="account/logout" name="signOut" id="signOut" class="signOut">
+                    <li class="mdc-deprecated-list-item" onclick="signOut.submit()">
+                        <span class="mdc-deprecated-list-item__ripple"></span>
+                        <span class="mdc-deprecated-list-item__text">
+                        <span class="mdc-deprecated-list-item__primary-text">Sign Out</span>
+                        <span class="mdc-deprecated-list-item__secondary-text">Click here to sign out</span>
+                        </span>
+                    </li>
+                </form>
+            <%}%>
         </ul>
 
 
         <!-- Buttons to sign in or create an account. -->
         <div class="account-options-container">
-            <button class="mdc-fab mdc-fab--extended" aria-label="Create" onclick="toCreate()">
-                <div class="mdc-fab__ripple"></div>
-                <i class="material-icons mdc-fab__icon material-symbols-outlined">add</i>
-                <span class="mdc-fab__label">Create</span>
-            </button>
+            <%if (!!!username){%>
+                <button class="mdc-fab mdc-fab--extended" aria-label="Create" onclick="toCreate()">
+                    <div class="mdc-fab__ripple"></div>
+                    <i class="material-icons mdc-fab__icon material-symbols-outlined">add</i>
+                    <span class="mdc-fab__label">Create</span>
+                </button>
 
-            <button class="mdc-fab mdc-fab--extended" aria-label="Sign in" onclick="toSignIn()">
-                <div class="mdc-fab__ripple"></div>
-                <i class="material-icons mdc-fab__icon material-symbols-outlined">login</i>
-                <span class="mdc-fab__label">Sign in</span>
-            </button>
+                <button class="mdc-fab mdc-fab--extended" aria-label="Sign in" onclick="toSignIn()">
+                    <div class="mdc-fab__ripple"></div>
+                    <i class="material-icons mdc-fab__icon material-symbols-outlined">login</i>
+                    <span class="mdc-fab__label">Sign in</span>
+                </button>
+            <%}else{%>
+                <form action="account/logout" method="POST">
+                    <button class="mdc-fab mdc-fab--extended" aria-label="Sign in" type="submit">
+                        <div class="mdc-fab__ripple"></div>
+                        <i class="material-icons mdc-fab__icon material-symbols-outlined">logout</i>
+                        <span class="mdc-fab__label">Sign Out</span>
+                    </button>
+                </form>
+            <%}%>
         </div>
 
 
         <!-- Change Username Dialog (toggleable)-->
-        <form class="mdc-dialog mdc-dialog" id="changeUsernameDialog" action="account" method="post">
+        <form class="mdc-dialog mdc-dialog" id="changeUsernameDialog"
+              <%if (!!!username) {%>
+                action="account" method="post"
+                <%}%>
+        >
             <div class="mdc-dialog__container">
                 <div tabindex="0" aria-hidden="true" class="mdc-dom-focus-sentinel"></div>
                 <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-describedby="ember202__content">
@@ -117,7 +144,7 @@
                             <span class="mdc-button__label">Cancel</span>
                         </button>
 
-                        <button class="mdc-button mdc-ripple-upgraded" data-mdc-dialog-action="ok" type="submitPassword"
+                        <button class="mdc-button mdc-ripple-upgraded" data-mdc-dialog-action="ok" type="submit"
                                 id="submitUsername">
                             <div class="mdc-button__ripple"></div>
                             <span class="mdc-button__label">Save</span>

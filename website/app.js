@@ -2,9 +2,11 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var mongoose = require('mongoose');
+
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const bcrypt = require('bcrypt');
+
+var session = require('cookie-session');
 
 var User = require(__dirname + '/models/user');
 var Book = require(__dirname + '/models/book');
@@ -39,11 +41,13 @@ async function getDatabase() {
 getDatabase();
 
 
-// Common session values across routers.
-app.use(function(req, res, next){
-    res.locals.userId = '';
-    next();
-});
+// Set cookie for auth.
+app.use(session({
+    name: 'translite-cookie',
+    keys: [process.env.COOKIE_SECRET],
+    maxAge: 24 * 60 * 60 * 1000             // 24 hours
+}));
+
 
 // View engine setup.
 app.set('views', path.join(__dirname, 'views'));

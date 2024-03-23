@@ -1,0 +1,7 @@
+.result-container {
+    margin: 75px auto 0;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

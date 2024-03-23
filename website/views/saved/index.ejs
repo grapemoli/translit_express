@@ -2,13 +2,23 @@
 <html>
 <head>
     <title><%= title %></title>
+
+    <link rel="stylesheet" href="/stylesheets/saved/index.css">
+
     <script src='/components/topBar.js' type="text/javascript" defer></script>
 </head>
 
 <top-bar></top-bar>
 
 <main class="mdc-top-app-bar--fixed-adjust mdc-typography">
-    <p class='mdc-typography--header6'>Please sign in to view all saved verses.</p>
+    <div class="result-container">
+        <h1 class="mdc-typograpy--header5">Saved Verses</h1>
+        <%if(!!!username) {%>
+            <p class='mdc-typography--header6'>Please sign in to view saved verses.</p>
+        <%}else{%>
+            <p class='mdc-typography--header6'>You are signed in! Start saving verses to see them all.</p>
+        <%}%>
+    </div>
 </main>
 
 </body>

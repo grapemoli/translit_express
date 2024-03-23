@@ -16,15 +16,21 @@ const RE_OK ="2";                       // Good request, but the user needs to s
 
 // Route: account
 router.get('/', function (req, res, next) {
-    res.render('account', {title: 'Translit | Account'});
+    res.render('account', {title: 'Translit | Account', username: req.session.username});
 });
 
 router.post('/', upload.none(),function (req, res, next) {
-    res.render('account', {title: 'Translit | Account'});
+    res.render('account', {title: 'Translit | Account', username: req.session.username});
 });
 
 router.get('/create', function (req, res, next) {
-    res.render('account/create', {title: 'Create Account', error: ''});
+    if(req.session.isAuth) {
+        // User who are logged in cannot access this page.
+        res.redirect('/');
+    }
+    else {
+        res.render('account/create', {title: 'Create Account', error: ''});
+    }
 });
 
 router.post('/create', upload.none(), function (req, res, next) {
@@ -60,7 +66,14 @@ router.post('/create', upload.none(), function (req, res, next) {
 });
 
 router.get('/login', function (req, res, next) {
-    res.render('account/login', {title: 'Sign In', error: ''});
+    if (req.session.isAuth) {
+        // Logged in users do not get access to this page.
+        res.redirect('/');
+    }
+    else {
+        res.render('account/login', {title: 'Sign In', error: ''});
+    }
+
 });
 
 router.post('/login', upload.none(), async function (req, res, next) {
@@ -78,9 +91,11 @@ router.post('/login', upload.none(), async function (req, res, next) {
             }
             else {
                 // User exists.
-                const isValid = await bcrypt.compare(password, result.password).then((valid) => {
+                await bcrypt.compare(password, result.password).then((valid) => {
                     if (valid) {
                         // Credentials are valid.
+                        req.session.isAuth = true;
+                        req.session.username = result.username;
                         res.redirect('/');
                     }
                     else {
@@ -97,27 +112,33 @@ router.post('/login', upload.none(), async function (req, res, next) {
 });
 
 router.get('/login/:id', function (req, res){
-    var error_msg = '';
-
-    if (req.params['id'] === OK) {
-        // Successful logins go to the main page.
-        // Do nothing.
+    if (req.session.isAuth) {
+        // Logged in users do not get access to this page.
+        res.redirect('/');
     }
     else {
-        if (req.params['id'] === DNE) {
-            error_msg = 'This user does not exist.';
-        }
-        else if (req.params['id'] === WRONG_PASSWORD) {
-            error_msg = 'This password is incorrect.';
-        }
-        else if (req.params['id'] === RE_OK) {
-            error_msg = 'Account created! Please sign in with your new credentials.';
+        var error_msg = '';
+
+        if (req.params['id'] === OK) {
+            // Successful logins go to the main page.
+            // Do nothing.
         }
         else {
-            error_msg = 'Something went wrong. Try again later.';
-        }
+            if (req.params['id'] === DNE) {
+                error_msg = 'This user does not exist.';
+            }
+            else if (req.params['id'] === WRONG_PASSWORD) {
+                error_msg = 'This password is incorrect.';
+            }
+            else if (req.params['id'] === RE_OK) {
+                error_msg = 'Account created! Please sign in with your new credentials.';
+            }
+            else {
+                error_msg = 'Something went wrong. Try again later.';
+            }
 
-        res.render('account/login', {title: 'Sign In', error: error_msg});
+            res.render('account/login', {title: 'Sign In', error: error_msg});
+        }
     }
 });
 
@@ -127,11 +148,20 @@ router.post('login/:id', function(req, res){
 
 
 router.get('/password', function (req, res, next) {
-    res.render('account/password', {title: 'Change Password'});
+    res.render('account/password', {title: 'Change Password', username: req.session.username});
 });
 
 router.post('/password', upload.none(), function (req, res, next) {
-    res.render('account/password', {title: 'Change Password'});
+    res.render('account/password', {title: 'Change Password', username: req.session.username});
+});
+
+router.post('/logout', function(req, res){
+    // Remove the cookie and return to the main page.
+    req.session.username = null;
+    req.session.isAuth = false;
+    req.session = null;
+
+    res.redirect('/');
 });
 
 
