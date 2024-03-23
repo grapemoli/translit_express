@@ -19,13 +19,6 @@ const userSchema = new mongoose.Schema({
         index: true
     },
 
-    email: {
-        type: String,
-        unique: true,
-        sparse: true,
-        trim: true
-    },
-
     saved: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'Saved'

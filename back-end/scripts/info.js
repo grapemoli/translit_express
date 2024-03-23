@@ -3,7 +3,7 @@
  * Prints various information about the database. Taken from Azure docs.
  * ***********************************************************************************/
 // Read .env file and set environment variables
-    //require('dotenv').config();           // TODO comment out for production mode.
+require('dotenv').config();           // TODO comment out for production mode.
 
 // Use official mongodb driver to connect to the server
 const { MongoClient } = require('mongodb');

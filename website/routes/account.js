@@ -20,7 +20,17 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/', upload.none(),function (req, res, next) {
-    res.render('account', {title: 'Translit | Account', username: req.session.username});
+    // Try to update the username. We know that if this operation fails, it's because the username
+    // is not unique.
+    User.init().then(() => {
+        User.findOneAndUpdate({username: req.session.username}, {username: req.body.username}).then(()=>{
+            req.session.username = req.body.username;
+            console.log(req.session.username);
+            res.render('account', {title: 'Translit | Account', username: req.session.username});
+        }).catch((err)=>{
+            res.render('account', {title: 'Translit | Account', username: req.session.username});
+        });
+    });
 });
 
 router.get('/create', function (req, res, next) {

@@ -9,6 +9,7 @@
     <link rel='stylesheet' href='/@material/dialog/dist/mdc.dialog.css'/>
     <link rel='stylesheet' href='/@material/icon-button/dist/mdc.icon-button.css'/>
     <link rel='stylesheet' href='/@material/textfield/dist/mdc.textfield.css'/>
+    <link rel='stylesheet' href='/@material/snackbar/dist/mdc.snackbar.css'/>
     <link rel='stylesheet' href='/@material/fab/dist/mdc.fab.css'/>
 
     <link rel='stylesheet' href='/@material/typography/dist/mdc.typography.css'/>
@@ -21,6 +22,7 @@
     <script src='/@material/list/dist/mdc.list.js'></script>
     <script src='/@material/dialog/dist/mdc.dialog.js'></script>
     <script src='/@material/textfield/dist/mdc.textfield.js'></script>
+    <script src='/@material/snackbar/dist/mdc.snackbar.js'></script>
     <script src='/javascripts/account/index.js'></script>
 
     <script src='/components/topBar.js' type="text/javascript" defer></script>
@@ -76,7 +78,7 @@
                 </span>
                 </li>
 
-                <form method="POST" action="account/logout" name="signOut" id="signOut" class="signOut">
+                <form method="POST" action="account/logout" name="signOut" id="signOut" class="signOut" enctype="multipart/form-data">
                     <li class="mdc-deprecated-list-item" onclick="signOut.submit()">
                         <span class="mdc-deprecated-list-item__ripple"></span>
                         <span class="mdc-deprecated-list-item__text">
@@ -104,8 +106,8 @@
                     <span class="mdc-fab__label">Sign in</span>
                 </button>
             <%}else{%>
-                <form action="account/logout" method="POST">
-                    <button class="mdc-fab mdc-fab--extended" aria-label="Sign in" type="submit">
+                <form action="account/logout" method="POST" enctype="multipart/form-data">
+                    <button class="mdc-fab mdc-fab--extended" aria-label="Sign Out" type="submit">
                         <div class="mdc-fab__ripple"></div>
                         <i class="material-icons mdc-fab__icon material-symbols-outlined">logout</i>
                         <span class="mdc-fab__label">Sign Out</span>
@@ -115,47 +117,80 @@
         </div>
 
 
-        <!-- Change Username Dialog (toggleable)-->
-        <form class="mdc-dialog mdc-dialog" id="changeUsernameDialog"
-              <%if (!!!username) {%>
-                action="account" method="post"
-                <%}%>
-        >
-            <div class="mdc-dialog__container">
-                <div tabindex="0" aria-hidden="true" class="mdc-dom-focus-sentinel"></div>
-                <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-describedby="ember202__content">
-                    <h2 class="mdc-dialog__title">Change Username</h2>
-                    <div class="mdc-dialog__content">
-                        <label class="mdc-text-field mdc-text-field--outlined mdc-text-field--no-label">
-                            <input id="newUsername" name='username' class="mdc-text-field__input" type="text" onchange="validate()" onkeyup="validate()">
-                            <span class="mdc-notched-outline mdc-notched-outline--no-label">
-                            <span class="mdc-notched-outline__leading"></span>
-                            <span class="mdc-notched-outline__notch"></span>
-                            <span class="mdc-notched-outline__trailing"></span>
-                        </span>
-                        </label>
-                        <div class="mdc-text-field-helper-line"></div>
-                    </div>
+        <!-- Change Username Dialog (toggleable). Only logged in users are able to process a username change. -->
+        <%if (!!!username){%>
+            <form class="mdc-dialog mdc-dialog" id="changeUsernameDialog" enctype="multipart/form-data">
+                <div class="mdc-dialog__container">
+                    <div tabindex="0" aria-hidden="true" class="mdc-dom-focus-sentinel"></div>
+                    <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-describedby="ember202__content">
+                        <h2 class="mdc-dialog__title">Change Username</h2>
+                        <div class="mdc-dialog__content">
+                            <label class="mdc-text-field mdc-text-field--outlined mdc-text-field--no-label">
+                                <input id="newUsername" name='username' class="mdc-text-field__input" type="text" onchange="validate()" onkeyup="validate()">
+                                <span class="mdc-notched-outline mdc-notched-outline--no-label">
+                                <span class="mdc-notched-outline__leading"></span>
+                                <span class="mdc-notched-outline__notch"></span>
+                                <span class="mdc-notched-outline__trailing"></span>
+                            </span>
+                            </label>
+                            <div class="mdc-text-field-helper-line"></div>
+                        </div>
 
-                    <div class="mdc-dialog__actions">
-                        <button class="mdc-button mdc-ripple-upgraded" data-mdc-dialog-action="cancel"
-                                type="cancelPassword" onclick="reset()">
-                            <div class="mdc-button__ripple"></div>
-                            <span class="mdc-button__label">Cancel</span>
-                        </button>
+                        <div class="mdc-dialog__actions">
+                            <button class="mdc-button mdc-ripple-upgraded" data-mdc-dialog-action="cancel"
+                                    type="reset" onclick="reset()">
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label">Cancel</span>
+                            </button>
 
-                        <button class="mdc-button mdc-ripple-upgraded" data-mdc-dialog-action="ok" type="submit"
-                                id="submitUsername">
-                            <div class="mdc-button__ripple"></div>
-                            <span class="mdc-button__label">Save</span>
-                        </button>
+                            <button class="mdc-button mdc-ripple-upgraded" data-mdc-dialog-action="ok" type="submit"
+                                    id="submitUsername">
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label">Save</span>
+                            </button>
+                        </div>
                     </div>
+                    <div tabindex="0" aria-hidden="true" class="mdc-dom-focus-sentinel"></div>
                 </div>
-                <div tabindex="0" aria-hidden="true" class="mdc-dom-focus-sentinel"></div>
-            </div>
-            <div class="mdc-dialog__scrim"></div>
-        </form>
+                <div class="mdc-dialog__scrim"></div>
+            </form>
+        <%}else{%>
+            <form class="mdc-dialog mdc-dialog" id="changeUsernameDialog" action="account" method="post" enctype="multipart/form-data">
+                <div class="mdc-dialog__container">
+                    <div tabindex="0" aria-hidden="true" class="mdc-dom-focus-sentinel"></div>
+                    <div class="mdc-dialog__surface" role="alertdialog" aria-modal="true" aria-describedby="ember202__content">
+                        <h2 class="mdc-dialog__title">Change Username</h2>
+                        <div class="mdc-dialog__content">
+                            <label class="mdc-text-field mdc-text-field--outlined mdc-text-field--no-label">
+                                <input id="newUsername" name='username' class="mdc-text-field__input" type="text" onchange="validate()" onkeyup="validate()">
+                                <span class="mdc-notched-outline mdc-notched-outline--no-label">
+                                <span class="mdc-notched-outline__leading"></span>
+                                <span class="mdc-notched-outline__notch"></span>
+                                <span class="mdc-notched-outline__trailing"></span>
+                            </span>
+                            </label>
+                            <div class="mdc-text-field-helper-line"></div>
+                        </div>
 
+                        <div class="mdc-dialog__actions">
+                            <button class="mdc-button mdc-ripple-upgraded" data-mdc-dialog-action="cancel"
+                                    type="reset" onclick="reset()">
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label">Cancel</span>
+                            </button>
+
+                            <button class="mdc-button mdc-ripple-upgraded" data-mdc-dialog-action="ok" type="submit"
+                                    id="submitUsername">
+                                <div class="mdc-button__ripple"></div>
+                                <span class="mdc-button__label">Save</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div tabindex="0" aria-hidden="true" class="mdc-dom-focus-sentinel"></div>
+                </div>
+                <div class="mdc-dialog__scrim"></div>
+            </form>
+        <%}%>
     </main>
 </body>
 

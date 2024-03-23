@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var mongoose = require('mongoose');
 
+const bcrypt = require('bcrypt');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
@@ -37,6 +38,13 @@ async function getDatabase() {
     var configData = require('./config/connection');
     const connectionInfo = await configData.getConnectionInfo();
     var db = await mongoose.connect(connectionInfo.DATABASE_URL);
+
+    // The models take longer to build indices than the application runs (async problem).
+    // Everytime you need to edit the model or reference it, make sure to call these methods in
+    // a .then() manner to guide Mongoose about the unique constraints.
+    User.init();
+    Book.init();
+    Saved.init();
 }
 getDatabase();
 
