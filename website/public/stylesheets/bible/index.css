@@ -5,6 +5,55 @@
 }
 
 .center-container {
-    display: inline-flex;
+    display: flex;
     vertical-align: middle;
+}
+
+.search-input-container {
+}
+
+.language-menu-container {
+    max-height:40vh;
+    width:100%;
+    overflow:hidden;
+    overflow-y:scroll;
+
+    #languageList {
+        max-height:40vh;
+        width:100%;
+        overflow:hidden;
+        overflow-y:scroll;
+    }
+}
+
+
+.version-menu-container {
+    max-height:40vh;
+    width:100%;
+    overflow:hidden;
+    overflow-y:scroll;
+
+    #versionList {
+        max-height:40vh;
+        width:100%;
+        overflow:hidden;
+        overflow-y:scroll;
+    }
+}
+
+.book-search-container {
+    text-align: center;
+
+    .book-menu-container, .chapter-menu-container, .verse-menu-container {
+        vertical-align: middle;
+
+        max-height:40vh;
+        width:100%;
+        overflow:hidden;
+        overflow-y:scroll;
+    }
+}
+
+.version-menu-anchor {
+    text-align: left;
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= title%>></title>
+    <title><%= title%></title>
 
     <link rel='stylesheet' href='/stylesheets/bible/index.css'/>
     <link rel='stylesheet' href='/stylesheets/account/create.css'/>
@@ -9,11 +9,25 @@
     <link rel='stylesheet' href='/@material/button/dist/mdc.button.css'/>
     <link rel='stylesheet' href='/@material/textfield/dist/mdc.textfield.css'/>
     <link rel='stylesheet' href='/@material/floating-label/dist/mdc.floating-label.css'/>
+    <link rel='stylesheet' href='/@material/menu/dist/mdc.menu.css'/>
+    <link rel='stylesheet' href='/@material/menu-surface/dist/mdc.menu-surface.css'/>
+    <link rel='stylesheet' href='/@material/list/dist/mdc.list.css'/>
+    <link rel='stylesheet' href='/@material/data-table/dist/mdc.data-table.css'/>
+    <link rel='stylesheet' href='/@material/switch/dist/mdc.switch.css'/>
+    <link rel='stylesheet' href='/@material/radio/dist/mdc.radio.css'/>
 
     <script src='/@material/form-field/dist/mdc.formField.js'></script>
+    <script src='/@material/radio/dist/mdc.radio.js'></script>
     <script src="/@material/textfield/dist/mdc.textfield.js"></script>
     <script src='/@material/floating-label/dist/mdc.floatingLabel.js'></script>
+    <script src='/@material/menu/dist/mdc.menu.js'></script>
+    <script src='/@material/list/dist/mdc.list.js'></script>
+    <script src='/@material/menu-surface/dist/mdc.menuSurface.js'></script>
+    <script src='/@material/data-table/dist/mdc.dataTable.js'></script>
+    <script src='/@material/switch/dist/mdc.switch.js'></script>
 
+    <script src="/JSON/versions/versions.js"></script>
+    <script src="/JSON/books/books.js"></script>
     <script src='/javascripts/bible/index.js'></script>
     <script src='/components/topBar.js' defer></script>
 
@@ -35,29 +49,246 @@
     <top-bar></top-bar>
 
     <main class="mdc-top-app-bar--fixed-adjust mdc-typography">
+
         <form class="form-container" style="text-align:center;" action="bible/result" method="POST" enctype="multipart/form-data">
             <label class="mdc-typography--headline5" style="text-align:left"><%= title %></label>
-                <label id='input' class="mdc-text-field mdc-text-field--filled mdc-ripple-upgraded mdc-text-field--with-leading-icon">
-                    <span class="mdc-text-field__ripple"></span>
 
-                    <span class="center-container" style="width:100%;">
-                        <i id='searchIcon' class="material-icons material-symbols-outlined mdc-text-field__icon mdc-text-field__icon--leading">Search</i>
-                        <input id="userInput" name="userInput" class="mdc-text-field__input" type="text" aria-labelledby="input"
-                               placeholder="Enter keywords..."
-                               aria-controls="input" aria-describedby="input"
-                               onchange="validate()"
-                               onkeyup="validate()">
-                    </span>
-                    <span class="mdc-line-ripple"></span>
-                </label>
+            <!-- Radio Button to select searching with keywords or with the dropdowns. -->
+            <div class="mdc-form-field">
+                <div class="mdc-radio">
+                    <input class="mdc-radio__native-control" type="radio" id="bookSearchRadio" name="radios" checked onclick="setSearch('bookSearchRadio')">
+                    <div class="mdc-radio__background">
+                        <div class="mdc-radio__outer-circle"></div>
+                        <div class="mdc-radio__inner-circle"></div>
+                    </div>
+                    <div class="mdc-radio__ripple"></div>
+                    <div class="mdc-radio__focus-ring"></div>
+                </div>
+                <label for="bookSearchRadio">Search by Book</label>
+
+                <div class="mdc-radio">
+                    <input class="mdc-radio__native-control" type="radio" id="keywordSearchRadio" name="radios" onclick="setSearch('keywordSearchRadio')">
+                    <div class="mdc-radio__background">
+                        <div class="mdc-radio__outer-circle"></div>
+                        <div class="mdc-radio__inner-circle"></div>
+                    </div>
+                    <div class="mdc-radio__ripple"></div>
+                    <div class="mdc-radio__focus-ring"></div>
+                </div>
+                <label for="keywordSearchRadio">Search by Keywords</label>
+            </div>
 
 
+            <!-- Form #1) Searching textfield. -->
+            <label id='input' style="display:none;" class="search-input-container mdc-text-field mdc-text-field--filled mdc-ripple-upgraded mdc-text-field--with-leading-icon">
+                <span class="mdc-text-field__ripple"></span>
+
+                <span class="center-container" style="width:100%;">
+                    <i id='searchIcon' class="material-icons material-symbols-outlined mdc-text-field__icon mdc-text-field__icon--leading">Search</i>
+                    <input id="userInput" name="userInput" class="mdc-text-field__input" type="text" aria-labelledby="input"
+                           placeholder="Enter keywords..."
+                           aria-controls="input" aria-describedby="input"
+                           onchange="validate()"
+                           onkeyup="validate()">
+                </span>
+                <span class="mdc-line-ripple"></span>
+            </label>
+
+
+            <!-- All dropdown creation. -->
+            <div class="mdc-menu-surface--anchor">
+
+                <!-- Form #2) Book search. -->
+                <!-- Dropdowns for the book/exact search. There are three dropdowns: (1) book* (2) chapters* (3) verses. -->
+                <!-- Note that dropdown #2 and #3 are dynamically rendered. -->
+                <div class="book-search-container" id="book-search-container">
+
+                    <!-- Book. -->
+                    <button class="mdc-button--outlined" style="width:30%; margin:3%;" type='button' id="selectBookButton" onclick="openBookMenu()">
+                        <span class="mdc-ripple-upgraded"></span>
+                        <span class="mdc-button__focus-ring"></span>
+                        <span id='bookLabel' class="mdc-button__label">Book: Psalms (default)</span>
+                    </button>
+
+                    <div class="book-menu-container mdc-menu mdc-menu-surface mdc-menu-surface" id="bookMenu">
+                        <ul class="mdc-deprecated-list" id="bookList" role="menu" aria-hidden="true" aria-orientation="vertical">
+                            <li>
+                                <ul class="mdc-menu__selection-group">
+
+                                    <!-- All books. -->
+                                    <%for(const [key, value] of Object.entries(BOOKS)){%>
+                                    <li class="mdc-deprecated-list-item" role="menuitem" aria-selected='false' id=<%=key%> enctype="multipart/form-data" data-value=<%=key%>>
+                                        <span class="mdc-deprecated-list-item__ripple"></span>
+                                        <span class="mdc-deprecated-list-item__graphic mdc-key-group-icon"></span>
+                                        <span class="mdc-deprecated-list-item__text"><%=key%></span>
+                                    </li>
+                                    <%}%>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Chapter (dynamic as the book is selected). Initially set to Genesis, Chapter 1.-->
+                    <button class="mdc-button--outlined" style="width:30%; margin:3%;" type='button' id="selectChapterButton" onclick="openChapterMenu()">
+                        <span class="mdc-ripple-upgraded"></span>
+                        <span class="mdc-button__focus-ring"></span>
+                        <span id='chapterLabel' class="mdc-button__label">Chapter: 1 (default)</span>
+                    </button>
+
+                    <div class="book-menu-container mdc-menu mdc-menu-surface mdc-menu-surface" id="chapterMenu">
+                        <ul class="mdc-deprecated-list" id="chapterList" role="menu" aria-hidden="true" aria-orientation="vertical">
+                            <li>
+                                <ul class="mdc-menu__selection-group">
+
+                                    <!-- All chapters. -->
+                                    <%for(var i = 1; i <= 150; i++){%>
+                                    <li class="mdc-deprecated-list-item" role="menuitem" aria-selected='false' id='chapter<%=i%>' enctype="multipart/form-data" data-value='chapter<%=i%>'>
+                                        <span class="mdc-deprecated-list-item__ripple"></span>
+                                        <span class="mdc-deprecated-list-item__graphic mdc-key-group-icon"></span>
+                                        <span class="mdc-deprecated-list-item__text">Chapter <%=i%></span>
+                                    </li>
+                                    <%}%>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+
+                <!-- Languages. -->
+                <div class="language-menu-container mdc-menu mdc-menu-surface " id="languageMenu">
+                    <ul class="mdc-deprecated-list" id="languageList" role="menu" aria-hidden="true" aria-orientation="vertical">
+                        <li>
+                            <!-- English -->
+                            <ul class="mdc-menu__selection-group">
+                                <li class="mdc-deprecated-list-item mdc-deprecated-list-item--selected" role="menuitem" aria-selected='true' id="English" enctype="multipart/form-data" data-value="English" >
+                                    <span class="mdc-deprecated-list-item__ripple"></span>
+                                    <span class="mdc-deprecated-list-item__graphic mdc-menu__selection-group-icon"></span>
+                                    <span class="mdc-deprecated-list-item__text">English</span>
+                                </li>
+
+                                <!-- All languages. -->
+                                <%for(var i = 0; i < LANGUAGES.length; i++){%>
+                                <li class="mdc-deprecated-list-item" role="menuitem" aria-selected='false' id="<%=LANGUAGES[i]%>" enctype="multipart/form-data" data-value="<%=LANGUAGES[i]%>">
+                                    <span class="mdc-deprecated-list-item__ripple"></span>
+                                    <span class="mdc-deprecated-list-item__graphic mdc-menu__selection-group-icon"></span>
+                                    <span class="mdc-deprecated-list-item__text"><%=LANGUAGES[i]%></span>
+                                </li>
+                                <%}%>
+
+                                <!-- Other Option -->
+                                <li class="mdc-deprecated-list-item" role="menuitem" aria-selected='false' id="Other" enctype="multipart/form-data" data-value="Other">
+                                    <span class="mdc-deprecated-list-item__ripple"></span>
+                                    <span class="mdc-deprecated-list-item__graphic mdc-menu__selection-group-icon"></span>
+                                    <span class="mdc-deprecated-list-item__text">Other</span>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+
+                <!-- Versions. -->
+                <div class="version-menu-container mdc-menu mdc-menu-surface mdc-menu-surface" id="versionMenu">
+                    <ul class="mdc-deprecated-list" id="versionList" role="menu" aria-hidden="true" aria-orientation="vertical">
+                        <li>
+                            <ul class="mdc-menu__selection-group" id="menuUL">
+
+                                <!-- All versions. -->
+                                <%for(const [key, value] of Object.entries(VERSIONS)){%>
+                                <li class="mdc-deprecated-list-item" role="menuitem" aria-selected='false' id=<%=key%> enctype="multipart/form-data" data-value=<%=key%>>
+                                    <span class="mdc-deprecated-list-item__ripple"></span>
+                                    <span class="mdc-deprecated-list-item__graphic mdc-key-group-icon"></span>
+                                    <span class="mdc-deprecated-list-item__text"><%=value.name%> (<%=key%>)</span>
+                                </li>
+                                <%}%>
+
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <!-- Submit button posts the form to results/. -->
             <button class="mdc-button" id="submitButton">
                 <span class="mdc-ripple-upgraded"></span>
                 <span class="mdc-button__focus-ring"></span>
                 <span class="mdc-button__label">Search</span>
             </button>
+
+            <!-- Hidden input values for (1) translation language, (2) Bible version. -->
+            <input id="languageInput" name="language" value="English" type="hidden" enctype="multipart/form-data">
+            <input id="versionInput" name="version" value="KJV" type="hidden" enctype="multipart/form-data">
+            <input id="searchTypeInput" name="searchType" value="book" type="hidden" enctype="multipart/form-data">
+            <input id="bookInput" name="book" value="Psalms" type="hidden" enctype="multipart/form-data">
+            <input id="chapterInput" name="chapter" value="1" type="hidden" enctype="multipart/form-data">
+            <input id="verseInput" name="verse" value="" type="hidden" enctype="multipart/form-data">
         </form>
+
+
+
+
+        <!-- Translation (on) or just fetching a verse (off). -->
+        <div style="padding:5%; text-align: right;">
+            <label for="translationSwitch">Translate &nbsp;</label>
+            <button id="translationSwitch" class="mdc-switch mdc-switch--unselected" type="button" role="switch" aria-checked="false" onclick="toggleTranslate()">
+                <div class="mdc-switch__track"></div>
+                <div class="mdc-switch__handle-track">
+                    <div class="mdc-switch__handle">
+                        <div class="mdc-switch__shadow">
+                            <div class="mdc-elevation-overlay"></div>
+                        </div>
+                        <div class="mdc-switch__ripple"></div>
+                        <div class="mdc-switch__icons">
+                            <svg class="mdc-switch__icon mdc-switch__icon--on" viewBox="0 0 24 24">
+                                <path d="M19.69,5.23L8.96,15.96l-4.23-4.23L2.96,13.5l6,6L21.46,7L19.69,5.23z" />
+                            </svg>
+                            <svg class="mdc-switch__icon mdc-switch__icon--off" viewBox="0 0 24 24">
+                                <path d="M20 13H4v-2h16v2z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <span class="mdc-switch__focus-ring-wrapper">
+            <div class="mdc-switch__focus-ring"></div>
+            </span>
+            </button>
+        </div>
+
+
+        <!-- Bible version dropdown. -->
+        <label class="mdc-typography--headline7" style="padding:5%; padding-bottom: 15%;">Version &nbsp;</label>
+        <button class="mdc-button--outlined" id="selectVersionButton" onclick="openVersionMenu()">
+            <span class="mdc-ripple-upgraded"></span>
+            <span class="mdc-button__focus-ring"></span>
+            <span id='versionLabel' class="mdc-button__label">King James Version (default)</span>
+        </button>
+
+        <br><br>
+
+        <!-- Dropdown for language selection. Gives options to toggle the translation.-->
+        <div id="language-select" style="padding:5%; display:none;">
+            <label class="mdc-typography--headline7">Translating From English To &nbsp;</label>
+            <button class="mdc-button--outlined" id="selectLanguageButton" onclick="openLanguageMenu()">
+                <span class="mdc-ripple-upgraded"></span>
+                <span class="mdc-button__focus-ring"></span>
+                <span id='languageLabel' class="mdc-button__label">English (default)</span>
+            </button>
+
+
+            <!-- Textfield for 'Other' language. -->
+                <span class="mdc-text-field__ripple" style="width:50%;"></span>
+                <input id="otherInput" name="other" style="width:50%; padding:2%; margin: 2%;"
+                       class="search-input-container mdc-text-field mdc-text-field--filled mdc-textfield--outlined mdc-ripple-upgrade mdc-text-field__input" type="hidden" aria-labelledby="input"
+                       placeholder="Enter language"
+                       aria-controls="input" aria-describedby="input"
+                       onchange="updateLanguage('otherInput')"
+                       onkeyup="updateLanguage('otherInput')" disabled>
+                <span class="mdc-line-ripple"></span>
+        </div>
+
 
     </main>
 </body>

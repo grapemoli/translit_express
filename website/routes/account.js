@@ -22,16 +22,21 @@ router.get('/', function (req, res, next) {
 router.post('/', upload.none(),function (req, res, next) {
     // Try to update the username. We know that if this operation fails, it's because the username
     // is not unique.
-    User.init().then(() => {
-        User.findOneAndUpdate({username: req.session.username}, {username: req.body.username}).then(()=>{
-            req.session.username = req.body.username;
-            // Successfully changed the username.
-            res.render('account', {title: 'Translit | Account', username: req.session.username, snackbar: 'Successfully changed username.'});
-        }).catch((err)=>{
-            // Something went wrong.
-            res.render('account', {title: 'Translit | Account', username: req.session.username, snackbar: 'This username is already taken. Try again.'});
+    if (req.body.username === '') {
+        res.render('account', {title: 'Translit | Account', username: req.session.username, snackbar: 'Username was not changed.'});
+    }
+    else {
+        User.init().then(() => {
+            User.findOneAndUpdate({username: req.session.username}, {username: req.body.username}).then(()=>{
+                req.session.username = req.body.username;
+                // Successfully changed the username.
+                res.render('account', {title: 'Translit | Account', username: req.session.username, snackbar: 'Successfully changed username.'});
+            }).catch((err)=>{
+                // Something went wrong.
+                res.render('account', {title: 'Translit | Account', username: req.session.username, snackbar: 'This username is already taken. Try again.'});
+            });
         });
-    });
+    }
 });
 
 router.get('/create', function (req, res, next) {

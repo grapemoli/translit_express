@@ -16,6 +16,14 @@
     <!--The result format: @flag#book#chapter#verseNumber#verse#version ... @flag (delimiter -->
     <div class="mdc-typography--header3" id="results"></div>
 
+    <%if (!!!result) {%>
+        <p class="mdc-typography--header3">No results.</p>
+    <%}else{%>
+        <h3 class="mdc-typography--header3"><%-citation%></h3>
+        <p class="mdc-typography--header3"><%-result%></p>
+    <%}%>
+
+    <!--
     <script>
         const resultString = '<%-result%>'
 
@@ -70,6 +78,7 @@
             }
         }
     </script>
+    -->
 </main>
 
 </body>

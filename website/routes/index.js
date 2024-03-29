@@ -1,12 +1,16 @@
 var express = require('express');
+const YouVersion = require("@glowstudent/youversion");
 var router = express.Router();
 
 
 // Route: Home Route
 router.get('/', function (req, res, next) {
-    res.render('index', {title: 'Translit', verse: 'But let patience have her perfect work, that ye may be perfect and entire, wanting nothing.', book: 'James', chapt: '1', num: '4', ver: 'KJV', snackbar: req.app.locals.snackbar});
-
-    req.app.locals.snackbar = '';
+    (async () => {
+        // Get the Verse of the Day before rendering the main page.
+        const verse = await YouVersion.getVerseOfTheDay();
+        res.render('index', {title: 'Translit', verse: verse.passage, citation: verse.citation, snackbar: req.app.locals.snackbar});
+        req.app.locals.snackbar = '';
+    })();
 });
 
 router.post('/', function (req, res, next) {
